@@ -33,10 +33,10 @@ const Profile = () => {
 					<form className="text-gray-500">
 						<div className="bg-white shadow rounded-lg">
 							<div className="px-10 py-8">
-								<Input label="Website" />
-								<Input label="Email" />
-								<Input label="Start Date" />
-								<Input label="Password" type="password" />
+								<Input name="website" label="Website" />
+								<Input name="email" label="Email" />
+								<Input name="start-date" label="Start Date" />
+								<Input name="password" label="Password" type="password" />
 							</div>
 
 							<div className="flex justify-between items-center bg-gray-50 px-10 py-6 rounded-br-lg rounded-bl-lg">

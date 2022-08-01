@@ -1,12 +1,15 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import Validator, { ValidationRule } from "../util/Validator";
 
 type InputProps = {
+	name: string;
+	value?: string;
 	type?: string;
 	label?: string;
 	placeholder?: string;
 	validator?: ValidationRule;
 	errorMessage?: string;
+	onChange?: (name: string, isValid: boolean) => void;
 };
 
 enum InputActionType {
@@ -33,7 +36,7 @@ const inputReducer = (state: InputState, action: InputAction): InputState => {
 				...state,
 				value: action.value,
 				isValid:
-					action.validator && action.value
+					action.validator && action.value !== undefined
 						? Validator.validate(action.value, action.validator)
 						: undefined,
 			};
@@ -49,10 +52,16 @@ const inputReducer = (state: InputState, action: InputAction): InputState => {
 
 const Input = (props: InputProps) => {
 	const [inputState, dispatch] = useReducer(inputReducer, {
-		value: "",
+		value: props.value || "",
 		isValid: false,
 		isTouched: false,
 	});
+
+	useEffect(() => {
+		if (props.onChange && inputState.isValid !== undefined) {
+			props.onChange(props.name, inputState.isValid);
+		}
+	}, [props.name, props.onChange, inputState.isValid]);
 
 	const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch({

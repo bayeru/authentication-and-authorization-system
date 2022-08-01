@@ -2,6 +2,7 @@ import React from "react";
 
 export interface ValidationRule {
 
+	email?: boolean;
 	required?: boolean;
 	minLength?: number;
 	maxLength?: number;
@@ -33,6 +34,19 @@ class Validator {
 			if (val.trim().length > rule.maxLength) {
 				return false;
 			}
+
+		}
+
+		if (rule.email) {
+
+			const emailRegex = /\S+@\S+\.\S+/;
+
+			if (!emailRegex.test(val.trim())) {
+
+				return false;
+
+			}
+
 
 		}
 

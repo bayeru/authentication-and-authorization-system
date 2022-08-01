@@ -1,8 +1,24 @@
 import React from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import useForm from "../hooks/useForm";
 
 const SignIn = () => {
+
+	const [formState, changeHandler] = useForm({
+		inputs: {
+			username: {
+				isValid: false
+			},
+			password: {
+				isValid: false
+			}
+		},
+		isValid: false
+	});
+
+	console.log(formState);
+
 	return (
 		<div className="flex flex-col min-h-screen justify-center">
 			<div className="container max-w-lg mx-auto px-10 py-8 text-gray-500 bg-white rounded-lg">
@@ -13,8 +29,8 @@ const SignIn = () => {
 				</header>
 
 				<form className="mb-5">
-					<Input placeholder="Username" validator={{required: true}} errorMessage="Please enter a valid username." />
-					<Input type="password" placeholder="Password" validator={{required: true, minLength:4, maxLength:20}} errorMessage="Your password must contain between 4 and 20 characters."/>
+					<Input name="username" placeholder="Username" validator={{required: true}} errorMessage="Please enter a valid username." onChange={changeHandler} />
+					<Input name="password" type="password" placeholder="Password" validator={{required: true, minLength:4, maxLength:40}} errorMessage="Your password must contain between 4 and 40 characters." onChange={changeHandler} />
 					<div className="flex items-center mb-5 text-sm">
 						<a
 							href="#"

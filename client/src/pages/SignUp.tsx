@@ -13,9 +13,9 @@ const SignUp = () => {
 				</header>
 
 				<form className="mb-5">
-					<Input placeholder="Email" />
-					<Input placeholder="Name" />
-					<Input type="password" placeholder="Password" />
+					<Input name="email" type="email" placeholder="Email" validator={{required: true, email:true}} errorMessage="Please enter a valid e-mail." />
+					<Input name="name" placeholder="Name" validator={{required: true}} errorMessage="Please enter a valid name." />
+					<Input name="password" type="password" placeholder="Password" validator={{required: true, minLength:4, maxLength:40 }} errorMessage="Your password must contain between 4 and 40 characters."/>
 					<div className="flex items-center mb-5 text-sm">
 						By proceeding, you agree to the&nbsp;
 						<a
