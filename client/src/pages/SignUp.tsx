@@ -1,5 +1,6 @@
 import React from "react";
-import Button from "../components/form/Button";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 const SignUp = () => {
 	return (
@@ -12,27 +13,9 @@ const SignUp = () => {
 				</header>
 
 				<form className="mb-5">
-					<div className="mb-5">
-						<input
-							type="text"
-							placeholder="Email"
-							className="block px-4 py-3 border rounded border-gray-200 sm:text-sm w-full bg-gray-50"
-						/>
-					</div>
-					<div className="mb-5">
-						<input
-							type="text"
-							placeholder="Name"
-							className="block px-4 py-3 border rounded border-gray-200 sm:text-sm w-full bg-gray-50"
-						/>
-					</div>
-					<div className="mb-5">
-						<input
-							type="password"
-							placeholder="Password"
-							className="block px-4 py-3 border rounded border-gray-200 sm:text-sm w-full bg-gray-50"
-						/>
-					</div>
+					<Input placeholder="Email" />
+					<Input placeholder="Name" />
+					<Input type="password" placeholder="Password" />
 					<div className="flex items-center mb-5 text-sm">
 						By proceeding, you agree to the&nbsp;
 						<a

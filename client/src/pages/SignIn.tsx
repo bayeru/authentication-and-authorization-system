@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "../components/form/Button";
-import Input from "../components/form/Input";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 const SignIn = () => {
 	return (
@@ -13,8 +13,8 @@ const SignIn = () => {
 				</header>
 
 				<form className="mb-5">
-					<Input placeholder="Username" />
-					<Input type="password" placeholder="Password" />
+					<Input placeholder="Username" validator={{required: true}} errorMessage="Please enter a valid username." />
+					<Input type="password" placeholder="Password" validator={{required: true, minLength:4, maxLength:20}} errorMessage="Your password must contain between 4 and 20 characters."/>
 					<div className="flex items-center mb-5 text-sm">
 						<a
 							href="#"

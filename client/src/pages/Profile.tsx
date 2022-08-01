@@ -1,5 +1,6 @@
 import React from "react";
-import Button from "../components/form/Button";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 const Profile = () => {
 	return (
@@ -32,54 +33,10 @@ const Profile = () => {
 					<form className="text-gray-500">
 						<div className="bg-white shadow rounded-lg">
 							<div className="px-10 py-8">
-								<div className="mb-5">
-									<label
-										htmlFor="company-website"
-										className="block text-sm font-medium text-gray-700"
-									>
-										Website
-									</label>
-									<input
-										type="text"
-										className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-									/>
-								</div>
-								<div className="mb-5">
-									<label
-										htmlFor="company-website"
-										className="block text-sm font-medium text-gray-700"
-									>
-										E-mail
-									</label>
-									<input
-										type="text"
-										className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-									/>
-								</div>
-								<div className="mb-5">
-									<label
-										htmlFor="company-website"
-										className="block text-sm font-medium text-gray-700"
-									>
-										Start Date
-									</label>
-									<input
-										type="text"
-										className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-									/>
-								</div>
-								<div className="mb-5">
-									<label
-										htmlFor="company-website"
-										className="block text-sm font-medium text-gray-700"
-									>
-										Password
-									</label>
-									<input
-										type="password"
-										className="mt-1 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-									/>
-								</div>
+								<Input label="Website" />
+								<Input label="Email" />
+								<Input label="Start Date" />
+								<Input label="Password" type="password" />
 							</div>
 
 							<div className="flex justify-between items-center bg-gray-50 px-10 py-6 rounded-br-lg rounded-bl-lg">
