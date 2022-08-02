@@ -40,7 +40,7 @@ const SignIn = () => {
 						</a>
 					</div>
 					<div className="mb-5">
-						<Button>Sign In</Button>
+						<Button fullWidth={true}>Sign In</Button>
 					</div>
 					<div className="font-medium text-center text-sm">
 						<span>
