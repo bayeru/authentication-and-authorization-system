@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useCallback, useReducer } from "react";
+import React, { useCallback, useReducer } from "react";
 
 enum FormActionType {
 	CHANGE = "CHANGE",
