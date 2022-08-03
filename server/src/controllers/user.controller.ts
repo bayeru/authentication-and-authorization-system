@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
-import { validateSignupInput } from '../validations/Validations';
+import { validateSignupInput } from "../validations/Validations";
 
 export const FAKE_USERS = [
 

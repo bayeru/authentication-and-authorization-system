@@ -2,7 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import { userRouter } from "./routes/user.router";
 import { authRouter } from "./routes/auth.router";
 import HttpError from "./util/HttpError";
+import { mongoConnect } from "./services/Mongo";
 
+mongoConnect();
 const app = express();
 
 app.use(express.json());

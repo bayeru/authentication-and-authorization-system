@@ -1,8 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
 import { FAKE_USERS } from "./user.controller";
+import { validateLoginInput } from "../validations/Validations";
 
-const login = (req: Request, res: Response) => {
+const login = (req: Request, res: Response, next:NextFunction) => {
+
+	const result = validateLoginInput(req.body);
+
+	if (result.error) {
+
+		return next(new HttpError(result.error.details[0].message, 422));
+
+	}
 
 	const { email, password } = req.body;
 	const user = FAKE_USERS.find(user => user.email === email);
