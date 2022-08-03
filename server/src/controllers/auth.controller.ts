@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
 import { FAKE_USERS } from "./user.controller";
 import { validateLoginInput } from "../validations/Validations";
+import User from "../models/user.model";
 
-const login = (req: Request, res: Response, next:NextFunction) => {
+const login = async (req: Request, res: Response, next:NextFunction) => {
 
 	const result = validateLoginInput(req.body);
 
@@ -14,18 +15,27 @@ const login = (req: Request, res: Response, next:NextFunction) => {
 	}
 
 	const { email, password } = req.body;
-	const user = FAKE_USERS.find(user => user.email === email);
+	let existingUser;
 
-	if (!user || user.password !== password) {
+	try {
 
-		throw new HttpError("Login failed: wrong credentials.", 401);
+		existingUser = await User.findOne({ email });
 
-	} else {
+	} catch (error) {
 
-		res.status(200).json({message: "Login successful!"});
+		return next(new HttpError("Cannot login, please try again later.", 500));
 
 	}
 
+	//const user = FAKE_USERS.find(user => user.email === email);
+
+	if (!existingUser || existingUser.password !== password) {
+
+		return next(new HttpError("Login failed: wrong credentials.", 401));
+
+	}
+
+	res.status(200).json({message: "Login successful!"});
 
 };
 

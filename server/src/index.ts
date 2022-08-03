@@ -4,7 +4,6 @@ import { authRouter } from "./routes/auth.router";
 import HttpError from "./util/HttpError";
 import { mongoConnect } from "./services/Mongo";
 
-mongoConnect();
 const app = express();
 
 app.use(express.json());
@@ -22,16 +21,18 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	if (res.headersSent) {
 		return next(err);
 	}
-
+	
 	if (err instanceof HttpError) {
 		res
-			.status(err.statusCode || 500)
-			.json({ message: err.message || "Something went wrong!" });
+		.status(err.statusCode || 500)
+		.json({ message: err.message || "Something went wrong!" });
 	} else {
 		res.status(500).json({ message: "Something went wrong!" });
 	}
 });
 
-app.listen(8000, () => {
-	console.log("Server started on port 8000");
+mongoConnect(() => {
+	app.listen(8000, () => {
+		console.log("Server started on port 8000");
+	});
 });

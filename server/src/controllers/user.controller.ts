@@ -1,74 +1,79 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
 import { validateSignupInput } from "../validations/Validations";
+import User from "../models/user.model";
 
 export const FAKE_USERS = [
-
 	{
 		id: 1,
 		name: "John Doe",
 		email: "johndoe@xmail.com",
-		password: "123456"
+		password: "123456",
 	},
 
 	{
 		id: 2,
 		name: "Jane Doe",
 		email: "janedoe@xmail.com",
-		password: "123456"
-	}
-
+		password: "123456",
+	},
 ];
 
-const getUser = (req: Request, res: Response) => {
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+	let user;
 
-	const user = FAKE_USERS.find(user => user.id === +req.params.id);
+	try {
+		user = await User.findById(req.params.id);		
+		//const user = FAKE_USERS.find(user => user.id === +req.params.id);
+	} catch (err) {
+		return next(
+			new HttpError("Something went wrong. Could not find user.", 500)
+		);
+	}
 
 	if (user) {
-		res.status(200).json(user);
+		res.status(200).json(user.toObject({ getters: true }));
 	} else {
 		res.status(404).json({ message: "User not found!" });
 	}
-
 };
 
-const signup = (req: Request, res: Response, next: NextFunction) => {
-
+const signup = async (req: Request, res: Response, next: NextFunction) => {
+	
 	const result = validateSignupInput(req.body);
-	
+
 	if (result.error) {
-		
 		return next(new HttpError(result.error.details[0].message, 422));
-		
 	}
-	
+
 	let { name, email, password } = req.body;
-	const user = FAKE_USERS.find(user => user.email === email);
+	let existingUser;
 
-	if (user) {
+	try {
+		existingUser = await User.findOne({ email });
 
-		return next(new HttpError("Email already exists.", 409));
-
+		if (existingUser) {
+			return next(new HttpError("Email already exists.", 409));
+		}
+	} catch (err) {
+		return next(
+			new HttpError("Cannot register new user, please try again later.", 500)
+		);
 	}
 
-	const newUser = {
-
-		id: FAKE_USERS.length + 1,
+	const newUser = new User({
 		name,
 		email,
-		password
+		password,
+	});
 
-	};
+	try {
+		await newUser.save();
+	} catch (err) {
+		return next(new HttpError("Creating user failed, please try again.", 500));
+	}
 
-	FAKE_USERS.push(newUser);
-	res.status(201).json(newUser);
-
+	res.status(201).json(newUser.toObject({ getters: true }));
 };
 
-
-export {
-
-	getUser,
-	signup
-
-};
+export { getUser, signup };
