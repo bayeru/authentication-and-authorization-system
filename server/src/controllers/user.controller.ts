@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
+import { validateSignupInput } from '../validations/Validations';
 
 export const FAKE_USERS = [
 
@@ -33,13 +34,20 @@ const getUser = (req: Request, res: Response) => {
 
 const signup = (req: Request, res: Response, next: NextFunction) => {
 
-	const { name, email, password } = req.body;
+	const result = validateSignupInput(req.body);
 	
+	if (result.error) {
+		
+		return next(new HttpError(result.error.details[0].message, 422));
+		
+	}
+	
+	let { name, email, password } = req.body;
 	const user = FAKE_USERS.find(user => user.email === email);
 
 	if (user) {
 
-		return next(new HttpError("User already exists.", 409));
+		return next(new HttpError("Email already exists.", 409));
 
 	}
 
