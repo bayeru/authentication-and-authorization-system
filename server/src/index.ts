@@ -35,6 +35,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	}
 });
 
+// Start the server if the database connection is successful.
 mongoConnect(() => {
 	app.listen(8000, () => {
 		console.log("Server started on port 8000");

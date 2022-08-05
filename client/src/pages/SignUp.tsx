@@ -26,9 +26,11 @@ const SignUp = () => {
 
 		isValid: false,
 	});
+	const [isLoading, setIsLoading] = React.useState(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setIsLoading(true);
 		const data = await signup({
 			name: formState.inputs.name.value,
 			email: formState.inputs.email.value,
@@ -36,7 +38,14 @@ const SignUp = () => {
 		});
 
 		console.log(data);
-		navigate("/signup/message", { replace: true });
+
+		if (!data) {
+			setIsLoading(false);
+			return;
+		} else {
+			navigate("/signup/message", { replace: true });
+		}
+
 	};
 
 	return (
@@ -85,7 +94,7 @@ const SignUp = () => {
 						</a>
 					</div>
 					<div className="mb-5">
-						<Button fullWidth={true}>Sign Up</Button>
+						<Button disabled={isLoading} fullWidth={true}>{isLoading ? "Loading..." : "Sign Up"}</Button>
 					</div>
 					<div className="font-medium text-center text-sm">
 						<span>

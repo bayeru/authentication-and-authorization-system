@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
-import { FAKE_USERS } from "./user.controller";
 import { validateLoginInput } from "../validations/Validations";
 import User from "../models/user.model";
 
-const login = async (req: Request, res: Response, next:NextFunction) => {
+const login = async (req: Request, res: Response, next:NextFunction) => {	
 
 	const result = validateLoginInput(req.body);
 
@@ -26,8 +25,6 @@ const login = async (req: Request, res: Response, next:NextFunction) => {
 		return next(new HttpError("Cannot login, please try again later.", 500));
 
 	}
-
-	//const user = FAKE_USERS.find(user => user.email === email);
 
 	if (!existingUser || existingUser.password !== password) {
 

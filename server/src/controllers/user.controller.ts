@@ -3,28 +3,11 @@ import HttpError from "../util/HttpError";
 import { validateSignupInput } from "../validations/Validations";
 import User from "../models/user.model";
 
-export const FAKE_USERS = [
-	{
-		id: 1,
-		name: "John Doe",
-		email: "johndoe@xmail.com",
-		password: "123456",
-	},
-
-	{
-		id: 2,
-		name: "Jane Doe",
-		email: "janedoe@xmail.com",
-		password: "123456",
-	},
-];
-
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
 	let user;
 
 	try {
-		user = await User.findById(req.params.id);		
-		//const user = FAKE_USERS.find(user => user.id === +req.params.id);
+		user = await User.findById(req.params.id);
 	} catch (err) {
 		return next(
 			new HttpError("Something went wrong. Could not find user.", 500)

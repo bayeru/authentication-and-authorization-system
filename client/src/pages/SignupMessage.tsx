@@ -1,6 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
 
 const SignupMessage = () => {
+
+	const navigate = useNavigate();
+
+	const clickHandler = (evt:React.MouseEvent<HTMLElement>) => {
+
+		evt.preventDefault();
+		navigate("/", { replace: true });
+
+	};
+
 	return (
 		<div className="flex flex-col min-h-screen justify-center">
 			<div className="container max-w-lg mx-auto px-10 py-8 text-gray-500 bg-white rounded-lg">
@@ -20,10 +32,11 @@ const SignupMessage = () => {
 						/>
 					</svg>
 
-					<h1 className="text-3xl font-bold text-center text-gray-900 p-6">
+					<h1 className="text-3xl font-bold text-center text-gray-900 p-2">
 						Thank you for signing up!
 					</h1>
-					<p>We've sent you an email to confirm your membership.</p>
+					<p className="mb-8">We've sent you an email to confirm your membership.</p>
+					<Button type="button" onClick={clickHandler}>Go Home</Button>
 				</header>
 			</div>
 		</div>

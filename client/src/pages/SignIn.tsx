@@ -2,24 +2,45 @@ import React from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useForm from "../hooks/useForm";
+import { login } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+	const navigate = useNavigate();
 
 	const [formState, changeHandler] = useForm({
 		inputs: {
-			username: {
+			email: {
 				value: "",
-				isValid: false
+				isValid: false,
 			},
 			password: {
 				value: "",
-				isValid: false
-			}
+				isValid: false,
+			},
 		},
-		isValid: false
+		isValid: false,
 	});
 
-	console.log(formState);
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [error, setError] = React.useState("");
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setIsLoading(true);
+
+		const result = await login({
+			email: formState.inputs.email.value,
+			password: formState.inputs.password.value,
+		});
+
+		if (result instanceof Error) {
+			setIsLoading(false);
+			setError(result.message);
+		} else {
+			navigate("/", { replace: true });
+		}
+	};
 
 	return (
 		<div className="flex flex-col min-h-screen justify-center">
@@ -30,9 +51,27 @@ const SignIn = () => {
 					</h1>
 				</header>
 
-				<form className="mb-5">
-					<Input name="username" placeholder="Username" validator={{required: true}} errorMessage="Please enter a valid username." onChange={changeHandler} />
-					<Input name="password" type="password" placeholder="Password" validator={{required: true, minLength:4, maxLength:40}} errorMessage="Your password must contain between 4 and 40 characters." onChange={changeHandler} />
+				{error && (
+					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6 font-medium">{error}</div>
+				)}
+
+				<form className="mb-5" onSubmit={handleSubmit}>
+					<Input
+						name="email"
+						type="email"
+						placeholder="Email"
+						validator={{ required: true, email: true }}
+						errorMessage="Please enter a valid email."
+						onChange={changeHandler}
+					/>
+					<Input
+						name="password"
+						type="password"
+						placeholder="Password"
+						validator={{ required: true, minLength: 5, maxLength: 40 }}
+						errorMessage="Your password must contain between 5 and 40 characters."
+						onChange={changeHandler}
+					/>
 					<div className="flex items-center mb-5 text-sm">
 						<a
 							href="#"
@@ -42,7 +81,9 @@ const SignIn = () => {
 						</a>
 					</div>
 					<div className="mb-5">
-						<Button fullWidth={true}>Sign In</Button>
+						<Button disabled={isLoading} fullWidth={true}>
+							{isLoading ? "Loading..." : "Sign In"}
+						</Button>
 					</div>
 					<div className="font-medium text-center text-sm">
 						<span>

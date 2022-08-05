@@ -1,4 +1,5 @@
-import axios from "axios";
+import { Response } from 'express';
+import axios, { AxiosError } from "axios";
 
 const API_URL = "http://localhost:8000/api";
 
@@ -12,11 +13,23 @@ export const signup = async (user: any) => {
 };
 
 export const login = async (user: any) => {
-	const response = await axios.post(
-		"http://localhost:3000/api/user/login",
-		user
-	);
-	return response.data;
+
+	try {
+		const response = await axios.post(`${API_URL}/auth/login`, user);
+
+	} catch (err) {
+		const axiosErr = err as AxiosError;
+		
+		if (axiosErr.response) {
+
+			if (axiosErr.response.status === 401) {				
+				return new Error("Incorrect email or password. Please try again.");
+			}
+
+		}
+
+	}
+	
 };
 
 export const logout = async (id: string) => {
