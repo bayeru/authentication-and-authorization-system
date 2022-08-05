@@ -8,9 +8,11 @@ const SignIn = () => {
 	const [formState, changeHandler] = useForm({
 		inputs: {
 			username: {
+				value: "",
 				isValid: false
 			},
 			password: {
+				value: "",
 				isValid: false
 			}
 		},

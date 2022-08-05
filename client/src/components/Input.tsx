@@ -9,7 +9,7 @@ type InputProps = {
 	placeholder?: string;
 	validator?: ValidationRule;
 	errorMessage?: string;
-	onChange?: (name: string, isValid: boolean) => void;
+	onChange?: (name: string, value: string, isValid: boolean) => void;
 };
 
 enum InputActionType {
@@ -59,9 +59,9 @@ const Input = (props: InputProps) => {
 
 	useEffect(() => {
 		if (props.onChange && inputState.isValid !== undefined) {
-			props.onChange(props.name, inputState.isValid);
+			props.onChange(props.name, inputState.value || "", inputState.isValid);
 		}
-	}, [props.name, props.onChange, inputState.isValid]);
+	}, [props.name, props.onChange, inputState.value, inputState.isValid]);
 
 	const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch({

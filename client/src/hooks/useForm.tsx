@@ -8,6 +8,7 @@ enum FormActionType {
 interface FormState {
 	inputs: {
 		[name: string]: {
+			value: string,
 			isValid: boolean;
 		};
 	};
@@ -18,6 +19,7 @@ interface FormState {
 interface FormAction {
 	type: FormActionType;
 	name: string;
+	value: string;
 	isValid: boolean;
 }
 
@@ -39,6 +41,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 				inputs: {
 					...state.inputs,
 					[action.name]: {
+						value: action.value,
 						isValid: action.isValid,
 					},
 				},
@@ -56,14 +59,15 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 	}
 };
 
-const useForm = (initialState: FormState):[formState:FormState, changeHandler:(name:string, isValid:boolean) => void] => {
+const useForm = (initialState: FormState):[formState:FormState, changeHandler:(name:string, value: string, isValid:boolean) => void] => {
 
 	const [formState, dispatch] = useReducer(formReducer, initialState);
 
-	const changeHandler = useCallback((name: string, isValid: boolean) => {
+	const changeHandler = useCallback((name: string, value: string, isValid: boolean) => {
 		dispatch({
 			type: FormActionType.CHANGE,
 			name: name,
+			value: value,
 			isValid: isValid,
 		});
 	}, []);

@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
 import { userRouter } from "./routes/user.router";
 import { authRouter } from "./routes/auth.router";
 import HttpError from "./util/HttpError";
@@ -7,6 +8,9 @@ import { mongoConnect } from "./services/Mongo";
 const app = express();
 
 app.use(express.json());
+app.use(cors({
+	origin: 'http://localhost:3000'
+}));
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
