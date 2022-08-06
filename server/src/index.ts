@@ -3,7 +3,7 @@ import cors from "cors";
 import { userRouter } from "./routes/user.router";
 import { authRouter } from "./routes/auth.router";
 import HttpError from "./util/HttpError";
-import { mongoConnect } from "./services/Mongo";
+import { mongoConnect } from "./services/mongo";
 
 const app = express();
 

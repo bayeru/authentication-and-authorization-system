@@ -1,13 +1,35 @@
+import { CustomRequest } from './../middleware/auth';
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../util/HttpError";
 import { validateSignupInput } from "../validations/Validations";
 import User from "../models/user.model";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
+
 	let user;
 
 	try {
 		user = await User.findById(req.params.id);
+	} catch (err) {
+		return next(
+			new HttpError("Something went wrong. Could not find user.", 500)
+		);
+	}
+
+	if (user) {
+		res.status(200).json(user.toObject({ getters: true }));
+	} else {
+		res.status(404).json({ message: "User not found!" });
+	}
+};
+
+const getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+	let user;
+
+	try {
+		user = await User.findById((req as CustomRequest).token.id).select("-password");
 	} catch (err) {
 		return next(
 			new HttpError("Something went wrong. Could not find user.", 500)
@@ -44,10 +66,12 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 		);
 	}
 
+	const hashedPassword = await bcrypt.hash(password, 12);
+
 	const newUser = new User({
 		name,
 		email,
-		password,
+		password: hashedPassword,
 	});
 
 	try {
@@ -56,7 +80,24 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 		return next(new HttpError("Creating user failed, please try again.", 500));
 	}
 
-	res.status(201).json(newUser.toObject({ getters: true }));
+	let token;
+
+	try {
+		token = jwt.sign(
+			{ id: newUser.id },
+			"jwt123",
+			{ expiresIn: "1h" }
+		);
+	} catch (err) {
+		return next(new HttpError("Signing up failed, please try again.", 500));
+	}
+	
+	res.status(201).json({
+		id: newUser.id,
+		email: newUser.email,
+		token: token
+	});
+
 };
 
-export { getUser, signup };
+export { getUser, getUserProfile, signup };
