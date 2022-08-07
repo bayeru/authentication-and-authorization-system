@@ -3,6 +3,22 @@ import axios, { AxiosError } from "axios";
 
 const API_URL = "http://localhost:8000/api";
 
+export const getUserProfile = async (id: string, token: string) => {
+
+	try {
+		const response = await axios.get(`${API_URL}/user/profile`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`
+			}
+		});
+		return response.data;
+	} catch (err) {
+		console.log(err);
+	}
+
+}
+
 export const signup = async (user: any) => {
 	try {
 		const response = await axios.post(`${API_URL}/user/signup`, user);
@@ -16,7 +32,7 @@ export const login = async (user: any) => {
 
 	try {
 		const response = await axios.post(`${API_URL}/auth/login`, user);
-
+		return response.data;
 	} catch (err) {
 		const axiosErr = err as AxiosError;
 		

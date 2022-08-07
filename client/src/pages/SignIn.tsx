@@ -2,10 +2,12 @@ import React from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useForm from "../hooks/useForm";
-import { login } from "../api/api";
+import { getUserProfile, login } from "../api/api";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../store/AuthContext";
 
 const SignIn = () => {
+	const context = React.useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const [formState, changeHandler] = useForm({
@@ -25,6 +27,8 @@ const SignIn = () => {
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [error, setError] = React.useState("");
 
+	console.log("SignIn", context);
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsLoading(true);
@@ -38,7 +42,14 @@ const SignIn = () => {
 			setIsLoading(false);
 			setError(result.message);
 		} else {
-			navigate("/", { replace: true });
+			context.login(result.id, result.token);
+			//navigate("/", { replace: true });
+
+			getUserProfile(result.id, result.token).then((user) => {
+				console.log("user", user);
+				navigate("/", { replace: true });
+			});
+
 		}
 	};
 
