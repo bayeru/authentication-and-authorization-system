@@ -12,22 +12,33 @@ type AuthContextProps = {
 
 };
 
-
 export const AuthContext = React.createContext<AuthContextProps>({
 	token: null,
 	login: (id: string, token: string) => {},
 	logout: () => {},
 });
 
-export const AuthContextProvider = (props: AuthContextProviderProps) => {
-	const [token, setToken] = React.useState<string | null>(null);
+// const getRemainingTime = (expiresAt: number):number => {
 
-	const login = (id:string, token: string | null) => {
+// 	const now = new Date().getTime();
+// 	return new Date(expiresAt).getTime() - now;
+
+// };
+
+export const AuthContextProvider = (props: AuthContextProviderProps) => {
+
+	const oldToken = JSON.parse(localStorage.getItem("token") as string);	
+	const [token, setToken] = React.useState<string | null>(oldToken.token);
+
+	const login = (id:string, token: string | null/*, expiresAt:number*/) => {
 		setToken(token);
+		localStorage.setItem("token", JSON.stringify({token}));
+		//const remainingTime = getRemainingTime(expiresAt);
 	};
 
 	const logout = () => {
 		setToken(null);
+		localStorage.removeItem("token");
 	};
 
 	return (

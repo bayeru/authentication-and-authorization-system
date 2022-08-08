@@ -45,7 +45,7 @@ const SignIn = () => {
 			context.login(result.id, result.token);
 			//navigate("/", { replace: true });
 
-			getUserProfile(result.id, result.token).then((user) => {
+			getUserProfile(result.token).then((user) => {
 				console.log("user", user);
 				navigate("/", { replace: true });
 			});

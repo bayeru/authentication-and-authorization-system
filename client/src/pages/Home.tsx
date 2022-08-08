@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { getUserProfile } from "../api/api";
+import AuthContext from "../store/AuthContext";
 
 const Home = () => {
+
+	const context = React.useContext(AuthContext);
+
+	console.log("Home", context);
+
+	useEffect(() => {
+
+		const loadUserProfile = async () => {
+
+			const result = await getUserProfile(context.token as string);
+
+			console.log(result);
+		};
+
+		loadUserProfile();
+
+	}, []);
+
+	// getUserProfile(context.token.id, context.token.token).then((user) => {
+	// 	console.log("user", user);
+	// 	navigate("/", { replace: true });
+	// });
+
 	return (
 		<div className="flex flex-col h-full">
 			<div className="flex justify-between items-center w-full px-8 py-4 bg-white border-b shadow">

@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 
 const API_URL = "http://localhost:8000/api";
 
-export const getUserProfile = async (id: string, token: string) => {
+export const getUserProfile = async (token: string) => {
 
 	try {
 		const response = await axios.get(`${API_URL}/user/profile`, {
