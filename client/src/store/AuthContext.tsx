@@ -28,7 +28,7 @@ export const AuthContext = React.createContext<AuthContextProps>({
 export const AuthContextProvider = (props: AuthContextProviderProps) => {
 
 	const oldToken = JSON.parse(localStorage.getItem("token") as string);	
-	const [token, setToken] = React.useState<string | null>(oldToken.token);
+	const [token, setToken] = React.useState<string | null>(oldToken ? oldToken.token : null);
 
 	const login = (id:string, token: string | null/*, expiresAt:number*/) => {
 		setToken(token);

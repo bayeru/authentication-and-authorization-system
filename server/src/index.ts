@@ -1,17 +1,19 @@
 import express, { Request, Response, NextFunction } from "express";
+import dotenv from "dotenv";
 import cors from "cors";
 import { userRouter } from "./routes/user.router";
 import { authRouter } from "./routes/auth.router";
 import HttpError from "./util/HttpError";
 import { mongoConnect } from "./services/mongo";
 
+dotenv.config();
 const app = express();
 
 app.use(express.json());
 app.use(cors({
 	origin: 'http://localhost:3000'
 }));
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 
 // Route not found handler (Pass error to next middleware, which is the error handler)
@@ -37,7 +39,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 // Start the server if the database connection is successful.
 mongoConnect(() => {
-	app.listen(8000, () => {
-		console.log("Server started on port 8000");
+
+	const PORT = process.env.PORT || 8000;
+
+	app.listen(PORT, () => {
+		console.log(`Server started on port ${PORT}`);
 	});
 });

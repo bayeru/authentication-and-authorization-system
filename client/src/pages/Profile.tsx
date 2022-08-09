@@ -1,8 +1,19 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import AuthContext from "../store/AuthContext";
 
 const Profile = () => {
+
+	const context = React.useContext(AuthContext);
+
+	const logoutHandler = async () => {
+
+		context.logout();
+
+	}
+
 	return (
 		<div className="flex flex-col h-full">
 			<div className="flex justify-between items-center w-full px-8 py-4 bg-white border-b shadow">
@@ -10,12 +21,8 @@ const Profile = () => {
 					<img className="w-10 h-10" src="images/logo.svg" alt="" />
 				</div>
 				<nav className="flex space-x-7">
-					<a href="#" className="href">
-						Profile
-					</a>
-					<a href="#" className="href">
-						Logout
-					</a>
+					<Link to="/">Home</Link>
+					<Link to="/" onClick={logoutHandler}>Logout</Link>
 				</nav>
 			</div>
 			<div className="grid grid-cols-3 gap-6 p-8 mt-10">

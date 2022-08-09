@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
-const MONGO_URL =
-	"mongodb+srv://dbadmin:gj6mqs1KDdQJSQ4V@cluster0.wmahrxg.mongodb.net/auth?retryWrites=true&w=majority";
-
 async function mongoConnect(callback?: () => void) {
+	const MONGO_URI = process.env.MONGO_URI || "";
+
 	await mongoose
-		.connect(MONGO_URL)
+		.connect(MONGO_URI)
 		.then(() => {			
 			console.log("MongoDB connected");
 			callback?.();
 		})
 		.catch((err) => {
 			console.log(err);
+			process.exit(1);
 		});
 }
 

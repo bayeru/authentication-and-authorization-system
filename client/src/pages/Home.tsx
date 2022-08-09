@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getUserProfile } from "../api/api";
 import AuthContext from "../store/AuthContext";
 
 const Home = () => {
 
 	const context = React.useContext(AuthContext);
-
-	console.log("Home", context);
 
 	useEffect(() => {
 
@@ -21,6 +20,12 @@ const Home = () => {
 
 	}, []);
 
+	const logoutHandler = async () => {
+
+		context.logout();
+
+	}
+
 	// getUserProfile(context.token.id, context.token.token).then((user) => {
 	// 	console.log("user", user);
 	// 	navigate("/", { replace: true });
@@ -33,12 +38,8 @@ const Home = () => {
 					<img className="w-10 h-10" src="images/logo.svg" alt="" />
 				</div>
 				<nav className="flex space-x-7">
-					<a href="#" className="href">
-						Profile
-					</a>
-					<a href="#" className="href">
-						Logout
-					</a>
+					<Link to="/profile">Profile</Link>
+					<Link to="/" onClick={logoutHandler}>Logout</Link>
 				</nav>
 			</div>
 			<header className="">
