@@ -2,15 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import AuthContext from "../store/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { authActions } from "../features/auth/auth-slice";
 
 const Profile = () => {
 
-	const context = React.useContext(AuthContext);
+	const { user, loading, error } = useSelector((state:RootState) => state.auth);
+	const dispatch = useDispatch();
 
 	const logoutHandler = async () => {
 
-		context.logout();
+		dispatch(authActions.logout());
 
 	}
 

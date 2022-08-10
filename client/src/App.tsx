@@ -6,25 +6,16 @@ import SignIn from "./pages/SignIn";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import SignupMessage from "./pages/SignupMessage";
-import AuthContext from "./store/AuthContext";
-import { AuthContextProvider } from "./store/AuthContext";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
 
 function App() {
-	const context = React.useContext(AuthContext);
 
-	// useEffect(() => {
-
-	// 	const token = JSON.parse(localStorage.getItem("token") as string);
-
-	// 	if (token) {
-	// 		context.login(token.id, token.token);
-	// 	}
-
-	// }, []);
-
+	const { user, loading, error } = useSelector((state:RootState) => state.auth);
+	
 	return (
 		<>
-			{context.token && (
+			{user?.token && (
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/signup" element={<Navigate to="/" replace />} />
@@ -34,7 +25,7 @@ function App() {
 					<Route path="*" element={<Navigate to="/" replace />} />
 				</Routes>
 			)}
-			{!context.token && (
+			{!user?.token && (
 				<Routes>
 					<Route path="/signup" element={<SignUp />} />
 					<Route path="/signup/message" element={<SignupMessage />} />

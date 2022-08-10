@@ -1435,11 +1435,6 @@ select{
   color: rgb(99 102 241 / var(--tw-text-opacity));
 }
 
-.hover\:text-gray-900:hover{
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
-}
-
 .focus\:border-red-500:focus{
   --tw-border-opacity: 1;
   border-color: rgb(239 68 68 / var(--tw-border-opacity));

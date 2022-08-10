@@ -40,3 +40,11 @@ export const login = async (user: any) => {
 		}
 	}
 };
+
+export const api = {
+
+	login,
+	signup,
+	getUserProfile
+
+}

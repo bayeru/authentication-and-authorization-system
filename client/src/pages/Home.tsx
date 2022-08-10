@@ -1,28 +1,33 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserProfile } from "../api/api";
-import AuthContext from "../store/AuthContext";
+import { RootState } from "../store/store";
+import { useDispatch } from "react-redux";
+import { authActions } from "../features/auth/auth-slice";
 
 const Home = () => {
 
-	const context = React.useContext(AuthContext);
+	const { user, loading, error } = useSelector((state: RootState) => state.auth);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 
-		const loadUserProfile = async () => {
+		// const loadUserProfile = async () => {
 
-			const result = await getUserProfile(context.token as string);
+		// 	const result = await getUserProfile(context.token as string);
 
-			console.log(result);
-		};
+		// 	console.log(result);
+		// };
 
-		loadUserProfile();
+		// loadUserProfile();
 
 	}, []);
 
 	const logoutHandler = async () => {
 
-		context.logout();
+		//context.logout();
+		dispatch(authActions.logout());
 
 	}
 

@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useForm from "../hooks/useForm";
-import { getUserProfile, login } from "../api/api";
+import { getUserProfile } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../store/AuthContext";
-
+import authSlice, { login, authActions } from "../features/auth/auth-slice";
+import { useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../store/store";
+import { useSelector } from "react-redux";
 
 const SignIn = () => {
-	const context = React.useContext(AuthContext);
+	
+	const { user, loading, error } = useSelector(
+		(state:RootState) => state.auth
+	);
 	const navigate = useNavigate();
+	const dispatch = useDispatch<AppDispatch>();
 
 	const [formState, changeHandler] = useForm({
 		inputs: {
@@ -25,33 +31,45 @@ const SignIn = () => {
 		isValid: false,
 	});
 
-	const [isLoading, setIsLoading] = React.useState(false);
-	const [error, setError] = React.useState("");
+	useEffect(() => {
 
-	console.log("SignIn", context);
+		if (user?.token) {
+			navigate("/", {replace: true});
+		}
+
+		// if (error) {
+		// 	alert(error);
+		// }
+
+	}, [user, navigate]);
+
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [clientError, setError] = React.useState("");
+
+	console.log("SignIn", user);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setIsLoading(true);
+		//setIsLoading(true);
 
-		const result = await login({
-			email: formState.inputs.email.value,
-			password: formState.inputs.password.value,
-		});
+		dispatch(
+			login({
+				email: formState.inputs.email.value,
+				password: formState.inputs.password.value,
+			})
+		);
 
-		if (result instanceof Error) {
-			setIsLoading(false);
-			setError(result.message);
-		} else {
-			context.login(result.id, result.token);
-			//navigate("/", { replace: true });
+		//if (result instanceof Error) {
+		//	setIsLoading(false);
+		//	setError(result.message);
+		//} else {
+		//	context.login(result.id, result.token);
+		//navigate("/", { replace: true });
 
-			getUserProfile(result.token).then((user) => {
-				console.log("user", user);
-				navigate("/", { replace: true });
-			});
-
-		}
+		// getUserProfile(result.token).then((user) => {
+		// 	console.log("user", user);
+		// 	navigate("/", { replace: true });
+		// });
 	};
 
 	return (
@@ -63,8 +81,10 @@ const SignIn = () => {
 					</h1>
 				</header>
 
-				{error && (
-					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6 font-medium">{error}</div>
+				{clientError && (
+					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6 font-medium">
+						{clientError}
+					</div>
 				)}
 
 				<form className="mb-5" onSubmit={handleSubmit}>
