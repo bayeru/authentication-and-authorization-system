@@ -3,11 +3,10 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import useForm from "../hooks/useForm";
 import { getUserProfile } from "../api/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import authSlice, { login, authActions } from "../features/auth/auth-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { useSelector } from "react-redux";
 
 const SignIn = () => {
 	
@@ -36,21 +35,16 @@ const SignIn = () => {
 		if (user?.token) {
 			navigate("/", {replace: true});
 		}
-
-		// if (error) {
-		// 	alert(error);
-		// }
+		
+		dispatch(authActions.clearErrors());
 
 	}, [user, navigate]);
-
-	const [isLoading, setIsLoading] = React.useState(false);
-	const [clientError, setError] = React.useState("");
 
 	console.log("SignIn", user);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
 		e.preventDefault();
-		//setIsLoading(true);
 
 		dispatch(
 			login({
@@ -59,17 +53,6 @@ const SignIn = () => {
 			})
 		);
 
-		//if (result instanceof Error) {
-		//	setIsLoading(false);
-		//	setError(result.message);
-		//} else {
-		//	context.login(result.id, result.token);
-		//navigate("/", { replace: true });
-
-		// getUserProfile(result.token).then((user) => {
-		// 	console.log("user", user);
-		// 	navigate("/", { replace: true });
-		// });
 	};
 
 	return (
@@ -81,9 +64,9 @@ const SignIn = () => {
 					</h1>
 				</header>
 
-				{clientError && (
-					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6 font-medium">
-						{clientError}
+				{error && (
+					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6">
+						{error}
 					</div>
 				)}
 
@@ -113,16 +96,14 @@ const SignIn = () => {
 						</a>
 					</div>
 					<div className="mb-5">
-						<Button disabled={isLoading} fullWidth={true}>
-							{isLoading ? "Loading..." : "Sign In"}
+						<Button disabled={loading} fullWidth={true}>
+							{loading ? "Loading..." : "Sign In"}
 						</Button>
 					</div>
 					<div className="font-medium text-center text-sm">
 						<span>
 							Don't have an account?&nbsp;
-							<a href="#" className="text-indigo-600 hover:text-indigo-500">
-								Sign Up
-							</a>
+							<Link to="/signup" className="text-indigo-600 hover:text-indigo-500">Sign Up</Link>							
 						</span>
 					</div>
 				</form>

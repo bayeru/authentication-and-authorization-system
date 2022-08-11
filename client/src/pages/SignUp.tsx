@@ -1,12 +1,17 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { signup } from "../api/api";
+import React, { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useForm from "../hooks/useForm";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../store/store";
+import authSlice, { signup, authActions } from "../features/auth/auth-slice";
 
 const SignUp = () => {
-
+	const { user, loading, error } = useSelector(
+		(state: RootState) => state.auth
+	);
+	const dispatch = useDispatch<AppDispatch>();
 	const navigate = useNavigate();
 	const [formState, changeHandler] = useForm({
 		inputs: {
@@ -26,26 +31,25 @@ const SignUp = () => {
 
 		isValid: false,
 	});
-	const [isLoading, setIsLoading] = React.useState(false);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsLoading(true);
-		const data = await signup({
-			name: formState.inputs.name.value,
-			email: formState.inputs.email.value,
-			password: formState.inputs.password.value
-		});
-
-		console.log(data);
-
-		if (!data) {
-			setIsLoading(false);
-			return;
-		} else {
+	useEffect(() => {
+		if (user) {
 			navigate("/signup/message", { replace: true });
 		}
 
+		dispatch(authActions.clearErrors());
+	}, [user, navigate]);
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		dispatch(
+			signup({
+				name: formState.inputs.name.value,
+				email: formState.inputs.email.value,
+				password: formState.inputs.password.value,
+			})
+		);
 	};
 
 	return (
@@ -56,6 +60,12 @@ const SignUp = () => {
 						SIGN UP
 					</h1>
 				</header>
+
+				{error && (
+					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6">
+						{error}
+					</div>
+				)}
 
 				<form className="mb-5" onSubmit={handleSubmit}>
 					<Input
@@ -94,14 +104,19 @@ const SignUp = () => {
 						</a>
 					</div>
 					<div className="mb-5">
-						<Button disabled={isLoading} fullWidth={true}>{isLoading ? "Loading..." : "Sign Up"}</Button>
+						<Button disabled={loading} fullWidth={true}>
+							{loading ? "Loading..." : "Sign Up"}
+						</Button>
 					</div>
 					<div className="font-medium text-center text-sm">
 						<span>
 							Already have an account?&nbsp;
-							<a href="#" className="text-indigo-600 hover:text-indigo-500">
+							<Link
+								to="/login"
+								className="text-indigo-600 hover:text-indigo-500"
+							>
 								Log in
-							</a>
+							</Link>
 						</span>
 					</div>
 				</form>

@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserProfile } from "../api/api";
 import { RootState } from "../store/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../features/auth/auth-slice";
 
 const Home = () => {
@@ -15,7 +14,7 @@ const Home = () => {
 
 		// const loadUserProfile = async () => {
 
-		// 	const result = await getUserProfile(context.token as string);
+		// 	const result = await getUserProfile(user?.token as string);
 
 		// 	console.log(result);
 		// };
@@ -26,15 +25,9 @@ const Home = () => {
 
 	const logoutHandler = async () => {
 
-		//context.logout();
 		dispatch(authActions.logout());
 
 	}
-
-	// getUserProfile(context.token.id, context.token.token).then((user) => {
-	// 	console.log("user", user);
-	// 	navigate("/", { replace: true });
-	// });
 
 	return (
 		<div className="flex flex-col h-full">

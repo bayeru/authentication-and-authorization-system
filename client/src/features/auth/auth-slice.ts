@@ -24,6 +24,18 @@ export const login = createAsyncThunk(
 			const result = await api.login(user);
 			localStorage.setItem("user", JSON.stringify(result));
 			return result;
+		} catch (err) {			
+			return thunkAPI.rejectWithValue((err as Error).message);
+		}
+	}
+);
+
+export const signup = createAsyncThunk(
+	"auth/signup",
+	async (user: any, thunkAPI) => {
+		try {
+			const result = await api.signup(user);
+			return result;
 		} catch (err) {
 			return thunkAPI.rejectWithValue((err as Error).message);
 		}
@@ -34,6 +46,9 @@ export const authSlice = createSlice({
 	name: "auth",
 	initialState,
 	reducers: {
+		clearErrors: (state) => {
+			state.error = null;
+		},
 		logout: (state) => {
 			state.user = null;	
 			state.loading = false;
@@ -55,7 +70,21 @@ export const authSlice = createSlice({
 				state.user = null;
 				state.loading = false;
 				state.error = action.payload as string;
+			})
+			.addCase(signup.pending, (state, action) => {
+				state.loading = true;
+			})
+			.addCase(signup.fulfilled, (state, action) => {
+				state.user = action.payload;
+				state.loading = false;
+				state.error = null;
+			})
+			.addCase(signup.rejected, (state, action) => {
+				state.user = null;
+				state.loading = false;
+				state.error = action.payload as string;
 			});
+
 	},
 });
 

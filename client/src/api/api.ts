@@ -19,10 +19,16 @@ export const getUserProfile = async (token: string) => {
 
 export const signup = async (user: any) => {
 	try {
-		const response = await axios.post(`${API_URL}/users/signup`, user);
+		const response = await axios.post(`${API_URL}/auth/signup`, user);
 		return response.data;
 	} catch (err) {
-		console.log(err);
+		const axiosErr = err as AxiosError;
+
+		if (axiosErr.response) {
+			if (axiosErr.response.status === 409) {
+				throw new Error("Email already exists.");
+			}
+		}
 	}
 };
 
@@ -35,7 +41,7 @@ export const login = async (user: any) => {
 
 		if (axiosErr.response) {
 			if (axiosErr.response.status === 401) {
-				return new Error("Incorrect email or password. Please try again.");
+				throw new Error("Incorrect email or password. Please try again.");
 			}
 		}
 	}
