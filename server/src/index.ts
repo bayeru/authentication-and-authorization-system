@@ -1,12 +1,12 @@
-import express, { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { userRouter } from "./routes/user.router";
 import { authRouter } from "./routes/auth.router";
 import HttpError from "./util/HttpError";
 import { mongoConnect } from "./services/mongo";
 
-dotenv.config();
 const app = express();
 
 app.use(express.json());

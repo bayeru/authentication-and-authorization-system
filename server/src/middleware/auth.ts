@@ -22,7 +22,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
 		}
 
 		try {
-			const decoded = jwt.verify(token, "jwt123") as CustomJwtPayload;
+			const decoded = jwt.verify(token, process.env.JWT_TOKEN as string) as CustomJwtPayload;
 			(req as CustomRequest).token = decoded;
 			next();
 		} catch (err) {

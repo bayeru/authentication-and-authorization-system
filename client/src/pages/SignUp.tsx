@@ -32,12 +32,15 @@ const SignUp = () => {
 		isValid: false,
 	});
 
+	console.log(user, loading, error);
+
 	useEffect(() => {
+		
 		if (user) {
 			navigate("/signup/message", { replace: true });
 		}
-
-		dispatch(authActions.clearErrors());
+		
+		dispatch(authActions.resetState());
 	}, [user, navigate]);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

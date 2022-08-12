@@ -4,6 +4,8 @@ import HttpError from "../util/HttpError";
 import { validateLoginInput, validateSignupInput } from "../validations/Validations";
 import User from "../models/user.model";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { sendVerificationEmail } from "../services/email";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
 	const result = validateLoginInput(req.body);
@@ -25,16 +27,21 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 		return next(new HttpError("Login failed: wrong credentials.", 401));
 	}
 
-	const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+	// const isPasswordValid = await bcrypt.compare(password, existingUser.password);
 
-	if (!isPasswordValid) {
+	// if (!isPasswordValid) {
+	// 	return next(new HttpError("Login failed: wrong credentials.", 401));
+	// }
+
+	if (!existingUser.verifyPassword(password)) {
 		return next(new HttpError("Login failed: wrong credentials.", 401));
 	}
+
 
 	let token;
 
 	try {
-		token = jwt.sign({ id: existingUser.id }, "jwt123", { expiresIn: "1h" });
+		token = jwt.sign({ id: existingUser.id }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 	} catch (err) {
 		return next(new HttpError("Cannot login, please try again.", 500));
 	}
@@ -69,16 +76,17 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 		);
 	}
 
-	const hashedPassword = await bcrypt.hash(password, 12);
-
 	const newUser = new User({
 		name,
 		email,
-		password: hashedPassword,
+		password: password,
+		verified: false,
+		verifyToken: crypto.randomBytes(32).toString("hex")
 	});
 
 	try {
 		await newUser.save();
+		await sendVerificationEmail(newUser.email, newUser.verifyToken);
 	} catch (err) {
 		return next(new HttpError("Creating user failed, please try again.", 500));
 	}
@@ -88,7 +96,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 	// try {
 	// 	token = jwt.sign(
 	// 		{ id: newUser.id },
-	// 		"jwt123",
+	// 		process.env.JWT_SECRET as string,
 	// 		{ expiresIn: "1h" }
 	// 	);
 	// } catch (err) {
@@ -103,4 +111,37 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 
 };
 
-export { login, signup };
+const verify = async (req: Request, res: Response, next: NextFunction) => {
+
+	const { token } = req.params;
+
+	console.log(token);
+
+	let user;
+
+	try {
+		user = await User.findOne({ verifyToken: token });
+	} catch (err) {
+		return next(new HttpError("Cannot verify email, please try again later.", 500));
+	}
+
+	if (!user) {
+		return next(new HttpError("Cannot verify email, please try again later.", 500));
+	}
+
+	user.verified = true;
+	user.verifyToken = '';
+
+	try {
+		await user.save();
+	} catch (err) {
+		return next(new HttpError("Cannot verify email, please try again later.", 500));
+	}
+
+	res.status(200).json({
+		message: "Email verified successfully."
+	});
+
+};
+
+export { login, signup, verify };
