@@ -32,8 +32,6 @@ const SignUp = () => {
 		isValid: false,
 	});
 
-	console.log(user, loading, error);
-
 	useEffect(() => {
 		
 		if (user) {

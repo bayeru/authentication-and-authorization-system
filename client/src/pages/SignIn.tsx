@@ -39,9 +39,7 @@ const SignIn = () => {
 		dispatch(authActions.clearErrors());
 
 	}, [user, navigate]);
-
-	console.log("SignIn", user);
-
+	
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
 		e.preventDefault();

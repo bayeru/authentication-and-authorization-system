@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import SignupMessage from "./pages/SignupMessage";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import VerificationMessage from "./pages/VerificationPage";
 
 function App() {
 
@@ -28,8 +29,9 @@ function App() {
 			{!user?.token && (
 				<Routes>
 					<Route path="/signup" element={<SignUp />} />
-					<Route path="/signup/message" element={<SignupMessage />} />
+					<Route path="/signup/message" element={<SignupMessage />} />					
 					<Route path="/login" element={<SignIn />} />
+					<Route path="/login/verify/:token" element={<VerificationMessage />} />
 					<Route path="*" element={<Navigate to="/login" replace />} />
 				</Routes>
 			)}

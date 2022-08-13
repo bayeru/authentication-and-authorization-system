@@ -27,16 +27,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 		return next(new HttpError("Login failed: wrong credentials.", 401));
 	}
 
-	// const isPasswordValid = await bcrypt.compare(password, existingUser.password);
-
-	// if (!isPasswordValid) {
-	// 	return next(new HttpError("Login failed: wrong credentials.", 401));
-	// }
-
-	if (!existingUser.verifyPassword(password)) {
+	if (!await existingUser.verifyPassword(password)) {
 		return next(new HttpError("Login failed: wrong credentials.", 401));
 	}
 
+	if (!existingUser.verified) {
+		return next(new HttpError("Please verify your email address.", 401));
+	}
 
 	let token;
 
@@ -91,18 +88,6 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 		return next(new HttpError("Creating user failed, please try again.", 500));
 	}
 
-	// let token;
-
-	// try {
-	// 	token = jwt.sign(
-	// 		{ id: newUser.id },
-	// 		process.env.JWT_SECRET as string,
-	// 		{ expiresIn: "1h" }
-	// 	);
-	// } catch (err) {
-	// 	return next(new HttpError("Signing up failed, please try again.", 500));
-	// }
-	
 	res.status(201).json({
 		id: newUser.id,
 		email: newUser.email,
@@ -115,8 +100,6 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
 
 	const { token } = req.params;
 
-	console.log(token);
-
 	let user;
 
 	try {
@@ -126,7 +109,7 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
 	}
 
 	if (!user) {
-		return next(new HttpError("Cannot verify email, please try again later.", 500));
+		return next(new HttpError("This link is invalid or has expired.", 401));
 	}
 
 	user.verified = true;
@@ -139,7 +122,9 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
 	}
 
 	res.status(200).json({
-		message: "Email verified successfully."
+		id: user.id,
+		email: user.email,
+		verified: user.verified
 	});
 
 };

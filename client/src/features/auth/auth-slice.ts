@@ -1,12 +1,12 @@
 import { api } from "../../api/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosStatic } from "axios";
 import { stat } from "fs";
 
 const API_URL = "http://localhost:8000/api";
 
 type AuthState = {
-	user: null | { email: string; name: string, token: string };
+	user: null | { email: string; name: string, token: string, verified: boolean };
 	loading: boolean;
 	error: string | null;
 };
@@ -24,8 +24,17 @@ export const login = createAsyncThunk(
 			const result = await api.login(user);
 			localStorage.setItem("user", JSON.stringify(result));
 			return result;
-		} catch (err) {			
-			return thunkAPI.rejectWithValue((err as Error).message);
+		} catch (err) {
+			const axiosError = err as AxiosError;
+			let message = "";
+			
+			if (axiosError.response && axiosError.response.data) {
+				message = (axiosError.response.data as { message: string }).message;
+			} else {
+				message = (err as Error).message;
+			}
+
+			return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -37,7 +46,37 @@ export const signup = createAsyncThunk(
 			const result = await api.signup(user);
 			return result;
 		} catch (err) {
-			return thunkAPI.rejectWithValue((err as Error).message);
+			const axiosError = err as AxiosError;
+			let message = "";
+			
+			if (axiosError.response && axiosError.response.data) {
+				message = (axiosError.response.data as { message: string }).message;
+			} else {
+				message = (err as Error).message;
+			}
+
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+export const verify = createAsyncThunk(
+	"auth/verify",
+	async (token: string, thunkAPI) => {
+		try {
+			const result = await api.verify(token);
+			return result;
+		} catch (err) {
+			const axiosError = err as AxiosError;
+			let message = "";
+			
+			if (axiosError.response && axiosError.response.data) {
+				message = (axiosError.response.data as { message: string }).message;
+			} else {
+				message = (err as Error).message;
+			}
+
+			return thunkAPI.rejectWithValue(message);
 		}
 	}
 );
@@ -85,6 +124,19 @@ export const authSlice = createSlice({
 				state.error = null;
 			})
 			.addCase(signup.rejected, (state, action) => {
+				state.user = null;
+				state.loading = false;
+				state.error = action.payload as string;
+			})
+			.addCase(verify.pending, (state, action) => {
+				state.loading = true;
+			})
+			.addCase(verify.fulfilled, (state, action) => {
+				state.user = action.payload;
+				state.loading = false;
+				state.error = null;
+			})
+			.addCase(verify.rejected, (state, action) => {
 				state.user = null;
 				state.loading = false;
 				state.error = action.payload as string;
