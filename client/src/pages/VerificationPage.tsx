@@ -26,7 +26,9 @@ const VerificationPage = () => {
 	};
 
 	const output = loading ? (
-		<p>Verifying...</p>
+		<h1 className="text-3xl font-bold text-center text-gray-900 p-2">
+			Verifying...
+		</h1>
 	) : error ? (
 		<div>
 			<svg
@@ -73,7 +75,7 @@ const VerificationPage = () => {
 			</h1>
 			<p className="mb-8">Thank you, your email has been verified.</p>
 			<Button type="button" onClick={clickHandler}>
-				Go Home
+				Login
 			</Button>
 		</div>
 	);
