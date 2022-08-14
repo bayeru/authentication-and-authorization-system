@@ -27,7 +27,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 		return next(new HttpError("Login failed: wrong credentials.", 401));
 	}
 
-	if (!await existingUser.verifyPassword(password)) {
+	if (!(await existingUser.verifyPassword(password))) {
 		return next(new HttpError("Login failed: wrong credentials.", 401));
 	}
 
@@ -38,7 +38,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 	let token;
 
 	try {
-		token = jwt.sign({ id: existingUser.id }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+		token = jwt.sign({ id: existingUser.id }, process.env.JWT_SECRET as string, {
+			expiresIn: "7d",
+		});
 	} catch (err) {
 		return next(new HttpError("Cannot login, please try again.", 500));
 	}
@@ -51,7 +53,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const signup = async (req: Request, res: Response, next: NextFunction) => {
-	
 	const result = validateSignupInput(req.body);
 
 	if (result.error) {
@@ -68,9 +69,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 			return next(new HttpError("Email already exists.", 409));
 		}
 	} catch (err) {
-		return next(
-			new HttpError("Cannot register new user, please try again later.", 500)
-		);
+		return next(new HttpError("Cannot register new user, please try again later.", 500));
 	}
 
 	const newUser = new User({
@@ -78,7 +77,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 		email,
 		password: password,
 		verified: false,
-		verifyToken: crypto.randomBytes(32).toString("hex")
+		verifyToken: crypto.randomBytes(32).toString("hex"),
 	});
 
 	try {
@@ -93,11 +92,9 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 		email: newUser.email,
 		//token: token
 	});
-
 };
 
 const verify = async (req: Request, res: Response, next: NextFunction) => {
-
 	const { token } = req.params;
 
 	let user;
@@ -113,7 +110,7 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
 	}
 
 	user.verified = true;
-	user.verifyToken = '';
+	user.verifyToken = "";
 
 	try {
 		await user.save();
@@ -124,9 +121,8 @@ const verify = async (req: Request, res: Response, next: NextFunction) => {
 	res.status(200).json({
 		id: user.id,
 		email: user.email,
-		verified: user.verified
+		verified: user.verified,
 	});
-
 };
 
 export { login, signup, verify };

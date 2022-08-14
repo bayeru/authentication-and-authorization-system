@@ -2,17 +2,14 @@ import React, { useEffect } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useForm from "../hooks/useForm";
-import { getUserProfile } from "../api/api";
+import { getUserDetails } from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
 import authSlice, { login, authActions } from "../features/auth/auth-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 
 const SignIn = () => {
-	
-	const { user, loading, error } = useSelector(
-		(state:RootState) => state.auth
-	);
+	const { authUser, loading, error } = useSelector((state: RootState) => state.auth);
 	const navigate = useNavigate();
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -31,17 +28,14 @@ const SignIn = () => {
 	});
 
 	useEffect(() => {
-
-		if (user?.token) {
-			navigate("/", {replace: true});
+		if (authUser?.token) {
+			navigate("/", { replace: true });
 		}
-		
+
 		dispatch(authActions.clearErrors());
+	}, [authUser, navigate]);
 
-	}, [user, navigate]);
-	
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
 		e.preventDefault();
 
 		dispatch(
@@ -50,23 +44,16 @@ const SignIn = () => {
 				password: formState.inputs.password.value,
 			})
 		);
-
 	};
 
 	return (
 		<div className="flex flex-col min-h-screen justify-center">
 			<div className="container max-w-lg mx-auto px-10 py-8 text-gray-500 bg-white rounded-lg">
 				<header className="mb-6">
-					<h1 className="text-3xl font-bold text-center text-gray-900 p-6">
-						SIGN IN
-					</h1>
+					<h1 className="text-3xl font-bold text-center text-gray-900 p-6">SIGN IN</h1>
 				</header>
 
-				{error && (
-					<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6">
-						{error}
-					</div>
-				)}
+				{error && <div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6">{error}</div>}
 
 				<form className="mb-5" onSubmit={handleSubmit}>
 					<Input
@@ -86,10 +73,7 @@ const SignIn = () => {
 						onChange={changeHandler}
 					/>
 					<div className="flex items-center mb-5 text-sm">
-						<a
-							href="#"
-							className="font-medium text-indigo-600 hover:text-indigo-500"
-						>
+						<a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
 							Forgot Password?
 						</a>
 					</div>
@@ -101,7 +85,9 @@ const SignIn = () => {
 					<div className="font-medium text-center text-sm">
 						<span>
 							Don't have an account?&nbsp;
-							<Link to="/signup" className="text-indigo-600 hover:text-indigo-500">Sign Up</Link>							
+							<Link to="/signup" className="text-indigo-600 hover:text-indigo-500">
+								Sign Up
+							</Link>
 						</span>
 					</div>
 				</form>

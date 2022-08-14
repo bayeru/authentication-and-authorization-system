@@ -3,12 +3,13 @@ import React, { useCallback, useReducer } from "react";
 enum FormActionType {
 	CHANGE = "CHANGE",
 	SUBMIT = "SUBMIT",
+	SET = "SET",
 }
 
 interface FormState {
 	inputs: {
 		[name: string]: {
-			value: string,
+			value: string;
 			isValid: boolean;
 		};
 	};
@@ -23,8 +24,17 @@ interface FormAction {
 	isValid: boolean;
 }
 
-const formReducer = (state: FormState, action: FormAction): FormState => {
+interface SetFormAction {
+	type: FormActionType.SET;
+	state: FormState;
+}
+
+const formReducer = (state: FormState, action: FormAction | SetFormAction): FormState => {
 	switch (action.type) {
+		case FormActionType.SET:
+			const formAction: SetFormAction = action as SetFormAction;
+			return formAction.state;
+
 		case FormActionType.CHANGE:
 			let formIsValid: boolean = true;
 
@@ -59,8 +69,13 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 	}
 };
 
-const useForm = (initialState: FormState):[formState:FormState, changeHandler:(name:string, value: string, isValid:boolean) => void] => {
-
+const useForm = (
+	initialState: FormState
+): [
+	formState: FormState,
+	changeHandler: (name: string, value: string, isValid: boolean) => void,
+	setHandler: (state: FormState) => void
+] => {
 	const [formState, dispatch] = useReducer(formReducer, initialState);
 
 	const changeHandler = useCallback((name: string, value: string, isValid: boolean) => {
@@ -72,8 +87,14 @@ const useForm = (initialState: FormState):[formState:FormState, changeHandler:(n
 		});
 	}, []);
 
-	return [formState, changeHandler];
+	const setData = useCallback((state: FormState) => {
+		dispatch({
+			type: FormActionType.SET,
+			state: state,
+		});
+	}, []);
 
+	return [formState, changeHandler, setData];
 };
 
 export default useForm;

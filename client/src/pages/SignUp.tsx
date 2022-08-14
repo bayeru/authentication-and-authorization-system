@@ -8,7 +8,7 @@ import { RootState, AppDispatch } from "../store/store";
 import authSlice, { signup, authActions } from "../features/auth/auth-slice";
 
 const SignUp = () => {
-	const { user, loading, error } = useSelector(
+	const {  authUser, loading, error } = useSelector(
 		(state: RootState) => state.auth
 	);
 	const dispatch = useDispatch<AppDispatch>();
@@ -34,12 +34,12 @@ const SignUp = () => {
 
 	useEffect(() => {
 		
-		if (user) {
+		if (authUser) {
 			navigate("/signup/message", { replace: true });
 		}
 		
 		dispatch(authActions.resetState());
-	}, [user, navigate]);
+	}, [authUser, navigate]);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();

@@ -6,22 +6,22 @@ import { stat } from "fs";
 const API_URL = "http://localhost:8000/api";
 
 type AuthState = {
-	user: null | { email: string; name: string, token: string, verified: boolean };
+	authUser: null | { email: string; name: string, token: string, verified: boolean };
 	loading: boolean;
 	error: string | null;
 };
 
 const initialState: AuthState = {
-	user: JSON.parse(localStorage.getItem("user") as string),
+	authUser: JSON.parse(localStorage.getItem("user") as string),
 	loading: false,
 	error: null
 };
 
 export const login = createAsyncThunk(
 	"auth/login",
-	async (user: any, thunkAPI) => {
+	async (authUser: any, thunkAPI) => {
 		try {
-			const result = await api.login(user);
+			const result = await api.login(authUser);
 			localStorage.setItem("user", JSON.stringify(result));
 			return result;
 		} catch (err) {
@@ -41,9 +41,9 @@ export const login = createAsyncThunk(
 
 export const signup = createAsyncThunk(
 	"auth/signup",
-	async (user: any, thunkAPI) => {
+	async (authUser: any, thunkAPI) => {
 		try {
-			const result = await api.signup(user);
+			const result = await api.signup(authUser);
 			return result;
 		} catch (err) {
 			const axiosError = err as AxiosError;
@@ -86,7 +86,7 @@ export const authSlice = createSlice({
 	initialState,
 	reducers: {
 		resetState: (state) => {
-			state.user = null;
+			state.authUser = null;
 			state.loading = false;
 			state.error = null;
 		},
@@ -94,7 +94,7 @@ export const authSlice = createSlice({
 			state.error = null;
 		},
 		logout: (state) => {
-			state.user = null;	
+			state.authUser = null;	
 			state.loading = false;
 			state.error = null;
 			localStorage.removeItem("user");
@@ -106,12 +106,12 @@ export const authSlice = createSlice({
 				state.loading = true;
 			})
 			.addCase(login.fulfilled, (state, action) => {
-				state.user = action.payload;
+				state.authUser = action.payload;
 				state.loading = false;
 				state.error = null;
 			})
 			.addCase(login.rejected, (state, action) => {
-				state.user = null;
+				state.authUser = null;
 				state.loading = false;
 				state.error = action.payload as string;
 			})
@@ -119,12 +119,12 @@ export const authSlice = createSlice({
 				state.loading = true;
 			})
 			.addCase(signup.fulfilled, (state, action) => {
-				state.user = action.payload;
+				state.authUser = action.payload;
 				state.loading = false;
 				state.error = null;
 			})
 			.addCase(signup.rejected, (state, action) => {
-				state.user = null;
+				state.authUser = null;
 				state.loading = false;
 				state.error = action.payload as string;
 			})
@@ -132,12 +132,12 @@ export const authSlice = createSlice({
 				state.loading = true;
 			})
 			.addCase(verify.fulfilled, (state, action) => {
-				state.user = action.payload;
+				state.authUser = action.payload;
 				state.loading = false;
 				state.error = null;
 			})
 			.addCase(verify.rejected, (state, action) => {
-				state.user = null;
+				state.authUser = null;
 				state.loading = false;
 				state.error = action.payload as string;
 			});

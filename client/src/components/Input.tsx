@@ -1,11 +1,15 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useCallback } from "react";
 import Validator, { ValidationRule } from "../util/Validator";
 
 type InputProps = {
 	name: string;
 	value?: string;
+	initialValue?: string;
 	type?: string;
 	label?: string;
+	disabled?: boolean;
+	valid?: boolean;
+	initialValid?: boolean;
 	placeholder?: string;
 	validator?: ValidationRule;
 	errorMessage?: string;
@@ -15,6 +19,7 @@ type InputProps = {
 enum InputActionType {
 	CHANGE = "CHANGE",
 	BLUR = "BLUR",
+	SET = "SET",
 }
 
 interface InputState {
@@ -29,8 +34,16 @@ interface InputAction {
 	validator?: ValidationRule;
 }
 
-const inputReducer = (state: InputState, action: InputAction): InputState => {
+interface InputSetAction {
+	type: InputActionType.SET;
+	state: InputState;
+}
+
+const inputReducer = (state: InputState, action: InputAction | InputSetAction): InputState => {
 	switch (action.type) {
+		case InputActionType.SET:
+			const inputSetAction: InputSetAction = action as InputSetAction;
+			return inputSetAction.state;
 		case InputActionType.CHANGE:
 			return {
 				...state,
@@ -52,24 +65,42 @@ const inputReducer = (state: InputState, action: InputAction): InputState => {
 
 const Input = (props: InputProps) => {
 	const [inputState, dispatch] = useReducer(inputReducer, {
-		value: props.value || "",
-		isValid: false,
+		value: props.initialValue || "",
+		isValid: props.initialValid || false,
 		isTouched: false,
 	});
 
 	useEffect(() => {
-		if (props.onChange && inputState.isValid !== undefined) {
-			props.onChange(props.name, inputState.value || "", inputState.isValid);
+		if (props.onChange) {
+			props.onChange(props.name, inputState.value || "", inputState.isValid || false);
 		}
-	}, [props.name, props.onChange, inputState.value, inputState.isValid]);
 
-	const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (props.initialValue && !inputState.isTouched) {
+			dispatch({
+				type: InputActionType.SET,
+				state: {
+					value: props.initialValue,
+					isValid: props.initialValid || true,
+					isTouched: true,
+				},
+			});
+		}
+	}, [
+		props.name,
+		props.onChange,
+		props.initialValue,
+		inputState.value,
+		inputState.isValid,
+		inputState.isTouched,
+	]);
+
+	const changeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch({
 			type: InputActionType.CHANGE,
 			value: e.target.value,
 			validator: props.validator,
 		});
-	};
+	}, []);
 
 	const blurHandler = () => {
 		dispatch({
@@ -80,17 +111,19 @@ const Input = (props: InputProps) => {
 	let style = "";
 
 	if (props.label) {
-		style +=
-			" mt-1 shadow-sm flex-1 block w-full rounded sm:text-sm border-gray-300";
+		style += " mt-1 shadow-sm flex-1 block w-full rounded sm:text-sm border-gray-300";
 	} else {
-		style +=
-			"block px-4 py-3 border rounded border-gray-200 sm:text-sm w-full bg-gray-50";
+		style += "block px-4 py-3 border rounded border-gray-200 sm:text-sm w-full bg-gray-50";
 	}
 
 	if (props.validator && !inputState.isValid && inputState.isTouched) {
 		style += " border-red-600 focus:ring-red-500 focus:border-red-500";
 	} else {
 		style += " focus:ring-indigo-500 focus:border-indigo-500";
+	}
+
+	if (props.disabled) {
+		style += " bg-gray-200";
 	}
 
 	return (
@@ -112,6 +145,7 @@ const Input = (props: InputProps) => {
 				onChange={changeHandler}
 				onBlur={blurHandler}
 				required={props.validator?.required}
+				disabled={props.disabled}
 			/>
 
 			{!inputState.isValid && inputState.isTouched && props.errorMessage && (

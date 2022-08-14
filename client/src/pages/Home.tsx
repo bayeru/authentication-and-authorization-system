@@ -1,43 +1,39 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getUserProfile } from "../api/api";
+import { getUserDetails } from "../api/api";
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../features/auth/auth-slice";
 
 const Home = () => {
-
-	const { user, loading, error } = useSelector((state: RootState) => state.auth);
+	const { authUser, loading, error } = useSelector((state: RootState) => state.auth);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-
 		// const loadUserProfile = async () => {
-
-		// 	const result = await getUserProfile(user?.token as string);
-
+		// 	const result = await getUserDetails(user?.token as string);
 		// 	console.log(result);
 		// };
-
 		// loadUserProfile();
-
 	}, []);
 
 	const logoutHandler = async () => {
-
 		dispatch(authActions.logout());
-
-	}
+	};
 
 	return (
 		<div className="flex flex-col h-full">
 			<div className="flex justify-between items-center w-full px-8 py-4 bg-white border-b shadow">
 				<div>
-					<img className="w-10 h-10" src="images/logo.svg" alt="" />
+					<Link to="/">
+						<img className="w-10 h-10" src="images/logo.svg" alt="" />
+					</Link>
 				</div>
 				<nav className="flex space-x-7">
 					<Link to="/profile">Profile</Link>
-					<Link to="/" onClick={logoutHandler}>Logout</Link>
+					<Link to="/" onClick={logoutHandler}>
+						Logout
+					</Link>
 				</nav>
 			</div>
 			<header className="">

@@ -12,7 +12,7 @@ import VerificationMessage from "./pages/VerificationPage";
 
 function App() {
 
-	const { user, loading, error } = useSelector((state:RootState) => state.auth);
+	const { authUser: user, loading, error } = useSelector((state:RootState) => state.auth);
 	
 	return (
 		<>

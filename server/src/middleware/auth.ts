@@ -17,12 +17,12 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
 	) {
 		const token = req.headers.authorization.split(" ")[1];
 
-		if (!token) {
+		if (!token) {			
 			return next(new HttpError("Authentication failed!", 401));
 		}
 
 		try {
-			const decoded = jwt.verify(token, process.env.JWT_TOKEN as string) as CustomJwtPayload;
+			const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as CustomJwtPayload;
 			(req as CustomRequest).token = decoded;
 			next();
 		} catch (err) {

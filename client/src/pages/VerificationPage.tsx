@@ -6,7 +6,7 @@ import { RootState, AppDispatch } from "../store/store";
 import authSlice, { authActions, verify } from "../features/auth/auth-slice";
 
 const VerificationPage = () => {
-	const { user, loading, error } = useSelector(
+	const { authUser, loading, error } = useSelector(
 		(state: RootState) => state.auth
 	);
 	const dispatch = useDispatch<AppDispatch>();
@@ -14,7 +14,7 @@ const VerificationPage = () => {
 	const params = useParams();
 
 	useEffect(() => {
-		if (!user) {
+		if (!authUser) {
 			dispatch(verify(params.token as string));
 		}
 	}, []);

@@ -9,8 +9,8 @@ interface AxiosResponseDataMessage {
 
 }
 
-export const getUserProfile = async (token: string) => {
-	try {
+export const getUserDetails = async (token: string) => {
+	//try {
 		const response = await axios.get(`${API_URL}/users/profile`, {
 			headers: {
 				"Content-Type": "application/json",
@@ -18,9 +18,21 @@ export const getUserProfile = async (token: string) => {
 			},
 		});
 		return response.data;
-	} catch (err) {
-		console.log(err);
-	}
+	//} catch (err) {
+	//	console.log(err);
+	//}
+};
+
+export const updateUserDetails = async (userDetails: any) => {
+
+	const response = await axios.put(`${API_URL}/users/profile`, userDetails, {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${userDetails.token}`,
+		},
+	});
+	return response.data;
+
 };
 
 export const signup = async (user: any) => {
@@ -75,6 +87,7 @@ export const api = {
 	login,
 	signup,
 	verify,
-	getUserProfile
+	getUserDetails,
+	updateUserDetails
 
 }
