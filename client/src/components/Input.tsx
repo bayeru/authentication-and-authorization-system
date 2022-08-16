@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useCallback } from "react";
 import Validator, { ValidationRule } from "../util/Validator";
 
-type InputProps = {
+interface InputProps {
 	name: string;
 	value?: string;
 	initialValue?: string;

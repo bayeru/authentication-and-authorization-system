@@ -1,6 +1,6 @@
 import React from "react";
 
-type ButtonProps = {
+interface ButtonProps {
 
 	type?: "button" | "submit" | "reset";
 	fullWidth?: boolean;

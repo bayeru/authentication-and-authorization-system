@@ -3,7 +3,7 @@
 
 import Button from "./Button";
 
-type ModalProps = {
+interface ModalProps {
 
 	title: string;
 	message: string;
