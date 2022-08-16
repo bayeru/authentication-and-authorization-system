@@ -2,6 +2,7 @@ import { api } from "../../api/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError, AxiosStatic } from "axios";
 import { stat } from "fs";
+import { deleteUser } from "../user/user-slice";
 
 const API_URL = "http://localhost:8000/api";
 
@@ -140,6 +141,12 @@ export const authSlice = createSlice({
 				state.authUser = null;
 				state.loading = false;
 				state.error = action.payload as string;
+			})
+			.addCase(deleteUser.fulfilled, (state, action) => {
+				state.authUser = null;	
+				state.loading = false;
+				state.error = null;
+				localStorage.removeItem("user");
 			});
 
 	},

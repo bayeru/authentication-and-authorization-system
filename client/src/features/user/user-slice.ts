@@ -1,7 +1,9 @@
+import { authActions } from './../auth/auth-slice';
 import { api } from "../../api/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError, AxiosStatic } from "axios";
 import { stat } from "fs";
+import { store } from "../../store/store";
 
 const API_URL = "http://localhost:8000/api";
 
@@ -18,6 +20,27 @@ const initialState: UserState = {
 	error: null,
 	message: null
 };
+
+export const deleteUser = createAsyncThunk(
+	"user/deleteUser",
+	async (token: string, thunkAPI) => {
+		try {
+			const { data } = await api.deleteUser(token);
+			return data;
+		} catch (err) {
+			const axiosError = err as AxiosError;
+			let message = "";
+			
+			if (axiosError.response && axiosError.response.data) {
+				message = (axiosError.response.data as { message: string }).message;
+			} else {
+				message = (err as Error).message;
+			}
+
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
 
 export const getUserDetails = createAsyncThunk(
 	"user/getUserDetails",
@@ -107,6 +130,26 @@ export const userSlice = createSlice({
 			.addCase(updateUserDetails.rejected, (state, action) => {
 				state.loading = false;
 				state.error = action.payload as string;
+			})
+			.addCase(deleteUser.pending, (state, action) => {
+				state.loading = true;
+			})
+			.addCase(deleteUser.fulfilled, (state, action) => {
+				state.userDetails = null;
+				state.loading = false;
+				state.error = null;
+				state.message = action.payload as string;
+				//store.dispatch(authActions.logout());
+			})
+			.addCase(deleteUser.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload as string;				
+			})
+			.addCase(authActions.logout, (state, action) => {
+				state.userDetails = null;
+				state.loading = false;
+				state.error = null;
+				state.message = null;
 			});
 	},
 });

@@ -21,6 +21,29 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+
+	let user;
+
+	try {
+		user = await User.findById((req as CustomRequest).token.id);
+	} catch (err) {
+		return next(new HttpError("Something went wrong. Could not delete user.", 500));
+	}
+
+	if (user) {
+		try {
+			await user.remove();
+		} catch (err) {
+			return next(new HttpError("Something went wrong. Could not delete user.", 500));
+		}
+		res.status(200).json({ message: "User deleted." });
+	} else {
+		res.status(404).json({ message: "User not found!" });
+	}
+
+};
+
 const getUserProfile = async (req: Request, res: Response, next: NextFunction) => {
 	let user;
 
@@ -57,4 +80,4 @@ const updateUserProfile = async (req: Request, res: Response, next: NextFunction
 	}
 };
 
-export { getUser, getUserProfile, updateUserProfile };
+export { getUser, deleteUser, getUserProfile, updateUserProfile };

@@ -9,6 +9,19 @@ interface AxiosResponseDataMessage {
 
 }
 
+export const deleteUser = async (token: string) => {
+
+	const response = await axios.delete(`${API_URL}/users/delete`, {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`
+		},
+	});
+
+	return response.data;
+
+};
+
 export const getUserDetails = async (token: string) => {
 	//try {
 		const response = await axios.get(`${API_URL}/users/profile`, {
@@ -87,6 +100,7 @@ export const api = {
 	login,
 	signup,
 	verify,
+	deleteUser,
 	getUserDetails,
 	updateUserDetails
 

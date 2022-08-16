@@ -7,6 +7,7 @@ type ButtonProps = {
 	onClick?: (evt:React.MouseEvent<HTMLElement>) => void;
 	children?: React.ReactNode;
 	disabled?: boolean;
+	className?: string;
 
 };
 
@@ -23,6 +24,12 @@ const Button = (props:ButtonProps) => {
 	} else {
 
 		style += " text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
+
+	}
+
+	if (props.className) {
+		
+		style += ` ${props.className}`;
 
 	}
 

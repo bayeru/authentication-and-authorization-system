@@ -7,10 +7,17 @@ import useForm from "../hooks/useForm";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { authActions } from "../features/auth/auth-slice";
-import { getUserDetails, updateUserDetails, userActions } from "../features/user/user-slice";
+import {
+	getUserDetails,
+	deleteUser,
+	updateUserDetails,
+	userActions,
+} from "../features/user/user-slice";
 import { AppDispatch } from "../store/store";
 
 const Profile = () => {
+	const [showModal, setShowModal] = React.useState(false);
+
 	// Get auth state from redux store
 	const { authUser, error: authError } = useSelector((state: RootState) => state.auth);
 
@@ -109,92 +116,126 @@ const Profile = () => {
 		);
 	};
 
+	let modal = null;
+
+	const showModalHandler = (evt: React.MouseEvent) => {
+		evt.preventDefault();
+		setShowModal(true);
+	};
+
+	const closeModalHandler = () => {
+		setShowModal(false);
+	};
+
+	const onModalConfirm = () => {
+		// Delete account
+		if (authUser) {
+			dispatch(deleteUser(authUser.token));
+		}
+	};
+
 	// Reformat the date to a more readable format
 	const formattedDate = new Date(formState.inputs.createdAt.value).toLocaleDateString();
 
 	return (
 		<>
-		<Modal />
-		<div className="flex flex-col h-full">
-			<div className="flex justify-between items-center w-full px-8 py-4 bg-white border-b shadow">
-				<div>
-					<Link to="/">
-						<img className="w-10 h-10" src="images/logo.svg" alt="" />
-					</Link>
-				</div>
-				<nav className="flex space-x-7">
-					<Link to="/">Home</Link>
-					<Link to="/" onClick={logoutHandler}>
-						Logout
-					</Link>
-				</nav>
-			</div>
-			<div className="grid grid-cols-3 gap-6 p-8 mt-10">
-				<div className="col-span-1">
-					<div className="px-4">
-						<h3 className="text-lg font-medium text-gray-900">Your Profile</h3>
-						<p className="mt-1 text-sm text-gray-600">
-							Here you can manage your profile settings and change the password, email or website.
-						</p>
+			{showModal && (
+				<Modal
+					title="Delete Account"
+					message="Are you sure you want to delete your account?"
+					onCancel={closeModalHandler}
+					onConfirm={onModalConfirm}
+				/>
+			)}
+			<div className="flex flex-col h-full">
+				<div className="flex justify-between items-center w-full px-8 py-4 bg-white border-b shadow">
+					<div>
+						<Link to="/">
+							<img className="w-10 h-10" src="images/logo.svg" alt="" />
+						</Link>
 					</div>
+					<nav className="flex space-x-7">
+						<Link to="/">Home</Link>
+						<Link to="/" onClick={logoutHandler}>
+							Logout
+						</Link>
+					</nav>
 				</div>
+				<div className="grid grid-cols-3 gap-6 p-8 mt-10">
+					<div className="col-span-1">
+						<div className="px-4">
+							<h3 className="text-lg font-medium text-gray-900">Your Profile</h3>
+							<p className="mt-1 text-sm text-gray-600">
+								Here you can manage your profile settings and change the password, email or website.
+							</p>
+						</div>
+					</div>
 
-				<div className="col-span-2 ">
-					<form className="text-gray-500" onSubmit={handleSubmit}>
-						<div className="bg-white shadow rounded-lg">
-							<div className="px-10 py-8">
-								{/* If there is an error or message, display it */}
-								{userDetailsMessage && (
-									<div className="p-5 bg-green-100 text-green-800 rounded-lg mb-6">
-										{userDetailsMessage}
-									</div>
-								)}
-								{userDetailsError && (
-									<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6">
-										{userDetailsError}
-									</div>
-								)}
-								<Input
-									name="name"
-									label="Name"
-									initialValue={formState.inputs.name.value}
-									validator={{ required: true }}
-									errorMessage="Please enter a valid name."
-									onChange={changeHandler}
-								/>
-								<Input
-									name="email"
-									label="Email"
-									initialValue={formState.inputs.email.value}
-									validator={{ required: true, email: true }}
-									errorMessage="Please enter a valid email."
-									onChange={changeHandler}
-								/>
-								<Input name="password" label="Password" type="password" onChange={changeHandler} />
-								<Input
-									name="creation-date"
-									label="Creation Date"
-									disabled={true}
-									initialValue={formattedDate === "Invalid Date" ? "" : formattedDate}
-								/>
-							</div>
+					<div className="col-span-2 ">
+						<form className="text-gray-500" onSubmit={handleSubmit}>
+							<div className="bg-white shadow rounded-lg">
+								<div className="px-10 py-8">
+									{/* If there is an error or message, display it */}
+									{userDetailsMessage && (
+										<div className="p-5 bg-green-100 text-green-800 rounded-lg mb-6">
+											{userDetailsMessage}
+										</div>
+									)}
+									{userDetailsError && (
+										<div className="p-5 bg-red-100 text-red-800 rounded-lg mb-6">
+											{userDetailsError}
+										</div>
+									)}
+									<Input
+										name="name"
+										label="Name"
+										initialValue={formState.inputs.name.value}
+										validator={{ required: true }}
+										errorMessage="Please enter a valid name."
+										onChange={changeHandler}
+									/>
+									<Input
+										name="email"
+										label="Email"
+										initialValue={formState.inputs.email.value}
+										validator={{ required: true, email: true }}
+										errorMessage="Please enter a valid email."
+										onChange={changeHandler}
+									/>
+									<Input
+										name="password"
+										label="Password"
+										type="password"
+										onChange={changeHandler}
+									/>
+									<Input
+										name="creation-date"
+										label="Creation Date"
+										disabled={true}
+										initialValue={formattedDate === "Invalid Date" ? "" : formattedDate}
+									/>
+								</div>
 
-							<div className="flex justify-between items-center bg-gray-50 px-10 py-6 rounded-br-lg rounded-bl-lg">
-								{/* If the details are being updated, disable and display "Loading" text on button */}
-								<Button disabled={userDetailsLoading}>
-									{userDetailsLoading ? "Loading" : "Save"}
-								</Button>
-								<div className="flex flex-col justify-items-center items-stretch text-sm">
-									<a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-										Delete my account
-									</a>
+								<div className="flex justify-between items-center bg-gray-50 px-10 py-6 rounded-br-lg rounded-bl-lg">
+									{/* If the details are being updated, disable and display "Loading" text on button */}
+									<Button disabled={userDetailsLoading}>
+										{userDetailsLoading ? "Loading" : "Save"}
+									</Button>
+									<div className="flex flex-col justify-items-center items-stretch text-sm">
+										<a
+											href="#"
+											className="font-medium text-indigo-600 hover:text-indigo-500"
+											onClick={showModalHandler}
+										>
+											Delete my account
+										</a>
+									</div>
 								</div>
 							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
 		</>
 	);
 };
