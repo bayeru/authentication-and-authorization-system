@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uygbay/auth-system.git"
+    "url": "git+https://github.com/uygarbayer/auth-system.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/uygbay/auth-system/issues"
+    "url": "https://github.com/uygarbayer/auth-system/issues"
   },
-  "homepage": "https://github.com/uygbay/auth-system#readme",
+  "homepage": "https://github.com/uygarbayer/auth-system#readme",
   "devDependencies": {
     "npm-run-all": "^4.1.5"
   }
