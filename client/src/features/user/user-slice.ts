@@ -1,4 +1,4 @@
-import { authActions } from './../auth/auth-slice';
+import { authActions } from "./../auth/auth-slice";
 import { api } from "../../api/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError, AxiosStatic } from "axios";
@@ -8,7 +8,7 @@ import { store } from "../../store/store";
 const API_URL = "http://localhost:8000/api";
 
 type UserState = {
-	userDetails: { id:string, name:string, email: string; createdAt: string | undefined } | null;
+	userDetails: { id: string; name: string; email: string; createdAt: string | undefined } | null;
 	loading: boolean;
 	error: string | null;
 	message: string | null;
@@ -18,29 +18,26 @@ const initialState: UserState = {
 	userDetails: null,
 	loading: false,
 	error: null,
-	message: null
+	message: null,
 };
 
-export const deleteUser = createAsyncThunk(
-	"user/deleteUser",
-	async (token: string, thunkAPI) => {
-		try {
-			const { data } = await api.deleteUser(token);
-			return data;
-		} catch (err) {
-			const axiosError = err as AxiosError;
-			let message = "";
-			
-			if (axiosError.response && axiosError.response.data) {
-				message = (axiosError.response.data as { message: string }).message;
-			} else {
-				message = (err as Error).message;
-			}
+export const deleteUser = createAsyncThunk("user/deleteUser", async (token: string, thunkAPI) => {
+	try {
+		const { data } = await api.deleteUser(token);
+		return data;
+	} catch (err) {
+		const axiosError = err as AxiosError;
+		let message = "";
 
-			return thunkAPI.rejectWithValue(message);
+		if (axiosError.response && axiosError.response.data) {
+			message = (axiosError.response.data as { message: string }).message;
+		} else {
+			message = (err as Error).message;
 		}
+
+		return thunkAPI.rejectWithValue(message);
 	}
-);
+});
 
 export const getUserDetails = createAsyncThunk(
 	"user/getUserDetails",
@@ -51,7 +48,7 @@ export const getUserDetails = createAsyncThunk(
 		} catch (err) {
 			const axiosError = err as AxiosError;
 			let message = "";
-			
+
 			if (axiosError.response && axiosError.response.data) {
 				message = (axiosError.response.data as { message: string }).message;
 			} else {
@@ -72,7 +69,7 @@ export const updateUserDetails = createAsyncThunk(
 		} catch (err) {
 			const axiosError = err as AxiosError;
 			let message = "";
-			
+
 			if (axiosError.response && axiosError.response.data) {
 				message = (axiosError.response.data as { message: string }).message;
 			} else {
@@ -99,11 +96,11 @@ export const userSlice = createSlice({
 		},
 		clearMessage: (state) => {
 			state.message = null;
-		}
+		},
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getUserDetails.pending, (state, action) => {
+			.addCase(getUserDetails.pending, (state) => {
 				state.loading = true;
 			})
 			.addCase(getUserDetails.fulfilled, (state, action) => {
@@ -143,7 +140,7 @@ export const userSlice = createSlice({
 			})
 			.addCase(deleteUser.rejected, (state, action) => {
 				state.loading = false;
-				state.error = action.payload as string;				
+				state.error = action.payload as string;
 			})
 			.addCase(authActions.logout, (state, action) => {
 				state.userDetails = null;
