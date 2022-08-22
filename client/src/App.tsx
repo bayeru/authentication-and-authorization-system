@@ -18,10 +18,7 @@ function App() {
 		<>
 			{user?.token && (
 				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/signup" element={<Navigate to="/" replace />} />
-					<Route path="/signup/message" element={<Navigate to="/" replace />} />
-					<Route path="/login" element={<Navigate to="/" replace />} />
+					<Route path="/" element={<Home />} />					
 					<Route path="/profile" element={<Profile />} />
 					<Route path="*" element={<Navigate to="/" replace />} />
 				</Routes>
