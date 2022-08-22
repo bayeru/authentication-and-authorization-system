@@ -7,7 +7,7 @@ import { store } from "../../store/store";
 
 const API_URL = "http://localhost:8000/api";
 
-type UserState = {
+interface UserState {
 	userDetails: { id: string; name: string; email: string; createdAt: string | undefined } | null;
 	loading: boolean;
 	error: string | null;

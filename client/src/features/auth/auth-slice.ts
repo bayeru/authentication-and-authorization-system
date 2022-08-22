@@ -6,7 +6,7 @@ import { deleteUser } from "../user/user-slice";
 
 const API_URL = "http://localhost:8000/api";
 
-type AuthState = {
+interface AuthState {
 	authUser: null | { email: string; name: string, token: string, verified: boolean };
 	loading: boolean;
 	error: string | null;
