@@ -16,7 +16,6 @@
 	  "noFallthroughCasesInSwitch": true,                  /* Report errors for fallthrough cases in switch statements. */
 	  "moduleResolution": "node",                          /* Specify how to resolve module names. */
 	  "resolveJsonModule": true,                           /* Resolve JSON files in node_modules. */
-	  "noEmit": true,                                      /* Do not emit outputs. */
 	  "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */,
 	  "removeComments": true,                             /* Do not emit comments to output. */
 	  "noImplicitThis": true,                              /* Report error when 'this' is not bound in property accesses. */
@@ -25,7 +24,10 @@
 	  "emitDecoratorMetadata": true,                       /* Emit metadata for class decorators. */
 	  "strictFunctionTypes": true,                        /* Enable strict checking of function types. */
 	  "strictNullChecks": true,                            /* Enable strict checking of nullish coalescing expressions. */
+	  "outDir": "./dist",                                  /* Redirect output structure to the directory. */
+	  "rootDir": "./src",                                  /* Specify the root directory of input files. */
 	},
-	  "include": ["src"]
+	  "include": ["src"],
+	  "exclude": ["node_modules", "dist"]
   }
   
