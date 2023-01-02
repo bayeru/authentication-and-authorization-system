@@ -23,17 +23,15 @@ export const deleteUser = async (token: string) => {
 };
 
 export const getUserDetails = async (token: string) => {
-	//try {
-		const response = await axios.get(`${API_URL}/users/profile`, {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		return response.data;
-	//} catch (err) {
-	//	console.log(err);
-	//}
+	
+	const response = await axios.get(`${API_URL}/users/profile`, {
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+	
 };
 
 export const updateUserDetails = async (userDetails: any) => {
@@ -49,50 +47,24 @@ export const updateUserDetails = async (userDetails: any) => {
 };
 
 export const signup = async (user: any) => {
-	// try {
-		const response = await axios.post(`${API_URL}/auth/signup`, user);
-		return response.data;
-	// } catch (err) {
-	// 	const axiosErr = err as AxiosError;
+	
+	const response = await axios.post(`${API_URL}/auth/signup`, user);
+	return response.data;
 
-	// 	if (axiosErr.response) {
-	// 		if (axiosErr.response.status === 409) {
-	// 			throw new Error("Email already exists.");
-	// 		}
-	// 	}
-	// }
 };
 
 export const login = async (user: any) => {
-	//try {
-		const response = await axios.post(`${API_URL}/auth/login`, user);
-		return response.data;
-	// } catch (err) {
-	// 	const axiosErr = err as AxiosError;
+	
+	const response = await axios.post(`${API_URL}/auth/login`, user);
+	return response.data;
 
-	// 	if (axiosErr.response) {
-			
-	// 		if (axiosErr.response.data) {
-	// 			const errMessage:AxiosResponseDataMessage = axiosErr.response.data as AxiosResponseDataMessage;
-	// 			throw new Error(errMessage.message);
-	// 		}
-	// 	}
-	// }
 };
 
 export const verify = async (token: string) => {
-	//try {
-		const response = await axios.get(`${API_URL}/auth/verify/${token}`);
-		return response.data;
-	// } catch (err) {
-	// 	const axiosErr = err as AxiosError;
-
-	// 	if (axiosErr.response) {
-	// 		if (axiosErr.response.status === 401) {
-	// 			throw new Error("Invalid token. Please try again.");
-	// 		}
-	// 	}
-	// }
+	
+	const response = await axios.get(`${API_URL}/auth/verify/${token}`);
+	return response.data;
+	
 };
 
 export const api = {

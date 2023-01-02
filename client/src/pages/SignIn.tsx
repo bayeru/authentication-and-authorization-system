@@ -48,7 +48,7 @@ const SignIn = () => {
 
 	return (
 		<div className="flex flex-col min-h-screen justify-center">
-			<div className="container max-w-lg mx-auto px-10 py-8 text-gray-500 bg-white rounded-lg">
+			<div className="container max-w-lg mx-auto px-10 py-8 text-gray-500 bg-white rounded-lg shadow-md">
 				<header className="mb-6">
 					<h1 className="text-3xl font-bold text-center text-gray-900 p-6">SIGN IN</h1>
 				</header>
