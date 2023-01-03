@@ -8,10 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
   CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
-  CAPROVER_BACKEND_APP: "${{ github.repository }}-backend"
-  CAPROVER_FRONTEND_APP: "${{ github.repository }}-frontend"
 
 jobs:
   build:
@@ -28,13 +25,8 @@ jobs:
             image: ghcr.io/uygarbayer/auth-system-frontend
             appname: auth-system-frontend
             context: ./frontend
-
-    permissions:
-      contents: read
-      packages: write
     
     steps:
-
       - name: Print matrix image
         run: echo ${{ matrix.image }}
       - name: Checkout repository
