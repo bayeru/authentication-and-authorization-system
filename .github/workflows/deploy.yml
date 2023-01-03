@@ -22,11 +22,11 @@ jobs:
         include:
           - dockerfile: ./backend/Dockerfile
             image: ghcr.io/uygarbayer/auth-system-backend
-            appname: backend
+            appname: auth-system-backend
             context: ./backend
           - dockerfile: ./frontend/Dockerfile
             image: ghcr.io/uygarbayer/auth-system-frontend
-            appname: frontend
+            appname: auth-system-frontend
             context: ./frontend
 
     permissions:
@@ -61,3 +61,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Deploy to caprover host
+        uses: floms/action-caprover@bc835272f3c1ec1a470d80d44fc2a4518eb85d9d
+        with:
+          host: ${{ env.CAPROVER_HOST }}
+          app: ${{ matrix.appname }})
+          password: "${{ secrets.CAPROVER_PASSWORD }}"
+          image: ${{ steps.meta.outputs.tags }}
+
+  
