@@ -1,8 +1,8 @@
 name: Build & Deploy
 
 on:
-  pull_request:
-    branches: ["master"]
+  # pull_request:
+  #   branches: ["master"]
   push:
     branches: ["master"]
 
@@ -10,8 +10,8 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
-  CAPROVER_BACKEND_APP: "${{ github.repository }}-be"
-  CAPROVER_FRONTEND_APP: "${{ github.repository }}-fe"
+  CAPROVER_BACKEND_APP: "${{ github.repository }}-backend"
+  CAPROVER_FRONTEND_APP: "${{ github.repository }}-frontend"
 
 jobs:
   build:
