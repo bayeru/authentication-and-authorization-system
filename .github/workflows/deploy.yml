@@ -21,33 +21,37 @@ jobs:
       matrix:
         include:
           - dockerfile: ./backend/Dockerfile
-            image: ${ REGISTRY }/${ CAPROVER_BACKEND_APP }
+            image: ghcr.io/uygarbayer/auth-system-backend
             appname: backend
           - dockerfile: ./frontend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-fe
+            image: ghcr.io/uygarbayer/auth-system-frontend
             appname: frontend
     
     steps:
-      - name: Print backend name
-        run: echo ${{ env.CAPROVER_BACKEND_APP }}
-      
-      - name: Print frontend name
-        run: echo ${{ env.CAPROVER_FRONTEND_APP }}
 
       - name: Print matrix image
         run: echo ${{ matrix.image }}
-      # - name: Checkout repository
-      #   uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # - name: Log in to github packages
-      #   uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to github packages
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-      #   with:
-      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ matrix.image }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
