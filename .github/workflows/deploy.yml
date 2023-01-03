@@ -10,7 +10,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
-  CAPROVER_BACKEND_APP: auth-system-be
+  CAPROVER_BACKEND_APP: ${{ env.IMAGE_NAME }}
   CAPROVER_FRONTEND_APP: auth-system-fe
 
 jobs:
