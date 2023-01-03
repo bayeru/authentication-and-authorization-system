@@ -33,6 +33,9 @@ jobs:
       
       - name: Print frontend name
         run: echo ${{ env.CAPROVER_FRONTEND_APP }}
+
+      - name: Print matrix image
+        run: echo ${{ matrix.image }}
       # - name: Checkout repository
       #   uses: actions/checkout@v3
 
