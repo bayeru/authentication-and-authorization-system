@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Build and Deploy
 
 on:
   # pull_request:
@@ -8,27 +8,17 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
   CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
+  CAPROVER_APP: auth-system-backend
+  CONTEXT: ./backend
+  DOCKERFILE: ./backend/Dockerfile
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - dockerfile: ./backend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-backend
-            appname: auth-system-backend
-            context: ./backend
-          - dockerfile: ./frontend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-frontend
-            appname: auth-system-frontend
-            context: ./frontend
     
-    steps:
-      - name: Print matrix image
-        run: echo ${{ matrix.image }}
+    steps:      
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -39,29 +29,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Print Image name
+        run: echo ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ matrix.image }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}      
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ${{ matrix.context }}
-          file: ${{ matrix.dockerfile }}
+          context: ${{ env.CONTEXT }}
+          file: ${{ env.DOCKERFILE }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Print steps.meta.outputs.tags
-        run: echo ${{ steps.meta.outputs.tags }}
-      
       - name: Deploy to caprover host
         uses: floms/action-caprover@bc835272f3c1ec1a470d80d44fc2a4518eb85d9d
         with:
           host: ${{ env.CAPROVER_HOST }}
-          app: ${{ matrix.appname }}
+          app: ${{ env.CAPROVER_APP }}
           password: "${{ secrets.CAPROVER_PASSWORD }}"
           image: ${{ steps.meta.outputs.tags }}
 
