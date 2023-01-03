@@ -21,10 +21,10 @@ jobs:
       matrix:
         include:
           - dockerfile: ./backend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-be
+            image: ${{ env.REGISTRY }}/${{ env.CAPROVER_BACKEND_APP }}
             appname: backend
           - dockerfile: ./frontend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-fe
+            image: ${{ env.REGISTRY }}/${{ env.CAPROVER_FRONTEND_APP }}
             appname: frontend
     
     steps:
