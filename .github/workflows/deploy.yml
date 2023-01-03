@@ -19,11 +19,11 @@ jobs:
         include:
           - dockerfile: ./backend/Dockerfile
             image: ghcr.io/uygarbayer/auth-system-backend
-            appname: auth-system-backend
+            appname: "auth-system-backend"
             context: ./backend
           - dockerfile: ./frontend/Dockerfile
             image: ghcr.io/uygarbayer/auth-system-frontend
-            appname: auth-system-frontend
+            appname: "auth-system-frontend"
             context: ./frontend
     
     steps:
