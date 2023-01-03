@@ -24,7 +24,7 @@ jobs:
             image: ${{ env.REGISTRY }}/${{ env.CAPROVER_BACKEND_APP }}
             appname: backend
           - dockerfile: ./frontend/Dockerfile
-            image: ${{ env.REGISTRY }}/${{ env.CAPROVER_FRONTEND_APP }}
+            image: ghcr.io/uygarbayer/auth-system-fe
             appname: frontend
     
     steps:
@@ -35,7 +35,7 @@ jobs:
         run: echo ${{ env.CAPROVER_FRONTEND_APP }}
 
       - name: Print matrix image
-        run: echo ${{ matrix.image }}
+        run: echo ${{ env.REGISTRY }}/${{ env.CAPROVER_BACKEND_APP }}
       # - name: Checkout repository
       #   uses: actions/checkout@v3
 
