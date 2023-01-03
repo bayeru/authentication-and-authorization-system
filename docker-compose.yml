@@ -9,13 +9,13 @@ services:
   #     - MONGO_INITDB_DATABASE=auth
   backend:
     build: ./backend
-    container_name: auth-sytem-be
+    container_name: auth-sytem-backend
     ports:
       - 8000:8000
 
   frontend:
     build: ./frontend
-    container_name: auth-sytem-fe
+    container_name: auth-sytem-frontend
     ports:
       - 80:80
     depends_on:
