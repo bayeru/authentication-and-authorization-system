@@ -23,9 +23,11 @@ jobs:
           - dockerfile: ./backend/Dockerfile
             image: ghcr.io/uygarbayer/auth-system-backend
             appname: backend
+            context: ./backend
           - dockerfile: ./frontend/Dockerfile
             image: ghcr.io/uygarbayer/auth-system-frontend
             appname: frontend
+            context: ./frontend
 
     permissions:
       contents: read
@@ -54,7 +56,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: .
+          context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
