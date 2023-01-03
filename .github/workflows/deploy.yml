@@ -61,6 +61,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Print steps.meta.outputs.tags
+        run: echo ${{ steps.meta.outputs.tags }}
       
       - name: Deploy to caprover host
         uses: floms/action-caprover@bc835272f3c1ec1a470d80d44fc2a4518eb85d9d
