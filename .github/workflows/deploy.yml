@@ -28,8 +28,6 @@ jobs:
             context: ./frontend
     
     steps:
-      - name: Set REACT_APP_BACKEND_URL
-        run: echo "REACT_APP_BACKEND_URL=test" >> $GITHUB_ENV
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -47,8 +45,10 @@ jobs:
           images: ${{ matrix.image }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc       
         with:
+          build-args: |
+            "REACT_APP_BACKEND_URL=${{ env.REACT_APP_BACKEND_URL }}"
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
