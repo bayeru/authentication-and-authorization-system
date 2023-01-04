@@ -13,6 +13,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_BACKEND_URL: https://srv-captain--auth-system-backend:8000
     strategy:
       fail-fast: false
       matrix:
