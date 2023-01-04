@@ -9,12 +9,11 @@ on:
 env:
   REGISTRY: ghcr.io
   CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
+  REACT_APP_BACKEND_URL: https://srv-captain--auth-system-backend:8000
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      REACT_APP_BACKEND_URL: https://srv-captain--auth-system-backend:8000
     strategy:
       fail-fast: false
       matrix:
