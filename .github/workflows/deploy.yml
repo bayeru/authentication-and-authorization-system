@@ -29,8 +29,8 @@ jobs:
             context: ./frontend
     
     steps:
-      - name: Print matrix image
-        run: echo ${{ matrix.image }}
+      - name: Print REACT_APP_BACKEND_URL
+        run: echo ${{ env.REACT_APP_BACKEND_URL }}
       - name: Checkout repository
         uses: actions/checkout@v3
 
