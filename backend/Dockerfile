@@ -14,7 +14,7 @@ RUN npm prune --production
 
 FROM node:alpine
 
-ENV CLIENT_URL http://localhost
+ENV CLIENT_URL https://auth-system.fullstack.market
 ENV PORT 8000
 ENV MONGO_URI mongodb+srv://dbadmin:gj6mqs1KDdQJSQ4V@cluster0.wmahrxg.mongodb.net/auth?retryWrites=true&w=majority
 ENV JWT_SECRET jwt123
