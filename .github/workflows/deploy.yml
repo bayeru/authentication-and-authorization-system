@@ -28,8 +28,8 @@ jobs:
             context: ./frontend
     
     steps:
-      - name: Print REACT_APP_BACKEND_URL
-        run: echo ${{ env.REACT_APP_BACKEND_URL }}
+      - name: Set REACT_APP_BACKEND_URL
+        run: echo "REACT_APP_BACKEND_URL=${{ env.REACT_APP_BACKEND_URL }}" >> $GITHUB_ENV
       - name: Checkout repository
         uses: actions/checkout@v3
 
