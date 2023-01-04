@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
-  REACT_APP_BACKEND_URL: https://srv-captain--auth-system-backend:8000
+  REACT_APP_BACKEND_URL: https://srv-captain--auth-system-backend
 
 jobs:
   build:
