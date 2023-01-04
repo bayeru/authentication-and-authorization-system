@@ -1,7 +1,7 @@
 import { Response } from "express";
 import axios, { AxiosError } from "axios";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "http://auth-system-backend.fsmdemo.fullstack.market/api";
 
 interface AxiosResponseDataMessage {
 
