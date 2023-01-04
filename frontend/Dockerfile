@@ -20,7 +20,7 @@ RUN npm prune --production
 
 FROM nginx:alpine
 
-COPY ./default.conf /etc/nginx/conf.d/
+#COPY ./default.conf /etc/nginx/conf.d/
 
 COPY --from=builder ./app/build /usr/share/nginx/html
 
