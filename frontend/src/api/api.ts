@@ -1,7 +1,10 @@
 import { Response } from "express";
 import axios, { AxiosError } from "axios";
 
-const API_URL = "https://auth-system-backend.fsmdemo.fullstack.market/api";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+const API_URL = `${BACKEND_URL}/api`;
+
+console.log(API_URL);
 
 interface AxiosResponseDataMessage {
 
