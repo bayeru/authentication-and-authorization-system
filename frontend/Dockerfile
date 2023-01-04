@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+
 RUN npm run build
 
 RUN npm prune --production
