@@ -4,8 +4,6 @@ import axios, { AxiosError } from "axios";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 const API_URL = `${BACKEND_URL}/api`;
 
-console.log(API_URL);
-
 interface AxiosResponseDataMessage {
 
 	message: string;
