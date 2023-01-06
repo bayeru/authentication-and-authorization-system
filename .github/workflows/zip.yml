@@ -27,6 +27,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get package version
+        id: package-version
         uses: martinbeentjes/npm-get-version-action@main
 
       - name: Print current version
