@@ -31,7 +31,7 @@ jobs:
         with:
           type: 'zip'
           filename: 'auth-system.zip'
-          exclusions: './.github/ ./.vscode/ .dockerignore .gitignore docker-compose.yml'
+          exclusions: '*.git* *.github* *.vscode* .dockerignore .gitignore docker-compose.yml'
 
       - name: Release
         uses: ncipollo/release-action@v1
