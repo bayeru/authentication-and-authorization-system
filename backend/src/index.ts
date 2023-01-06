@@ -17,8 +17,8 @@ app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 
 // Route not found handler (Pass error to next middleware, which is the error handler)
-app.use((req: Request, res: Response, next: NextFunction) => {
-	next(new HttpError("Route cannot be found.", 404));
+app.use((req: Request, res: Response, next: NextFunction) => {	
+	next(new HttpError("Route cannot be found." + req.url, 404));
 });
 
 // Error handler, it's placed after all the routes
