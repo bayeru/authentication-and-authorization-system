@@ -38,5 +38,5 @@ jobs:
         with:
           artifacts: 'auth-system.zip'
           token: ${{ secrets.GITHUB_TOKEN }}
-
+          tag: 'zip'
   
