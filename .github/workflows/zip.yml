@@ -31,12 +31,12 @@ jobs:
         with:
           type: 'zip'
           filename: 'auth-system.zip'
-          exclusions: '.github .vscode .dockerignore .gitignore .docker-compose.yml'
+          exclusions: './.github/ ./.vscode/ .dockerignore .gitignore docker-compose.yml'
 
       - name: Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: 'auth-system.zip'
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 'zip'
+          tag: 'auth-system.zip'
   
