@@ -1,0 +1,42 @@
+name: Build & Deploy
+
+on:
+  # pull_request:
+  #   branches: ["master"]
+  push:
+     branches: ["master"]
+
+env:
+  REGISTRY: ghcr.io
+  CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
+  REACT_APP_BACKEND_URL: https://auth-system.fullstack.market
+
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to github packages
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Zip
+        uses: thedoctor0/zip-release@main
+        with:
+          type: 'zip'
+          filename: '${{ github.repository }}.zip'
+          exclusions: '.github .vscode .dockerignore .gitignore .docker-compose.yml'
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: '${{ github.repository }}.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  
