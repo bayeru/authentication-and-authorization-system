@@ -28,6 +28,9 @@ jobs:
 
       - name: Get package version
         uses: martinbeentjes/npm-get-version-action@main
+
+      - name: Print current version
+        run: echo ${{ steps.package-version.outputs.current-version}}
       
       - name: Create Zip
         uses: thedoctor0/zip-release@main
