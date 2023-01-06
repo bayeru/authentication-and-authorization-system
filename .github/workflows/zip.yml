@@ -25,19 +25,22 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get package version
+        uses: martinbeentjes/npm-get-version-action@main
       
       - name: Create Zip
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          filename: 'auth-system.zip'
-          exclusions: '*.git* *.github* *.vscode* .dockerignore .gitignore docker-compose.yml'
+          filename: 'auth-system-${{ steps.package-version.outputs.current-version}}.zip'
+          exclusions: '*.git* *.github* *.vscode* .dockerignore .gitignore docker-compose.yml package.json'      
 
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: 'auth-system.zip'
+          artifacts: 'auth-system-${{ steps.package-version.outputs.current-version}}.zip'
           allowUpdates: 'true'
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 'auth-system.zip'
+          tag: 'auth-system-${{ steps.package-version.outputs.current-version}}.zip'
   

@@ -1,6 +1,6 @@
 {
-  "name": "auth-system",
-  "version": "0.1.0",
+  "name": "auth-system-frontend",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
