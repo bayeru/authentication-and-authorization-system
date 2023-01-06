@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Create Zip
 
 on:
   # pull_request:
@@ -30,13 +30,13 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          filename: '${{ github.repository }}.zip'
+          filename: 'auth-system.zip'
           exclusions: '.github .vscode .dockerignore .gitignore .docker-compose.yml'
 
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: '${{ github.repository }}.zip'
+          artifacts: 'auth-system.zip'
           token: ${{ secrets.GITHUB_TOKEN }}
 
   
