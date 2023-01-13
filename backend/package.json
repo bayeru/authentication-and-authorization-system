@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:prod": "node dist/index.js",
     "start:dev": "nodemon src/index.ts",
+    "start:prod": "node dist/index.js",
     "build": "tsc",
     "docker:build": "docker build -t auth-system-be .",
-    "docker:run": "docker run --name auth-system-be -p 8000:8000 auth-system-be:latest"
+    "docker:run": "docker run --name auth-system-be -p 8000:8000 auth-system-be"
   },
   "author": "",
   "license": "ISC",

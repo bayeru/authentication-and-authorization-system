@@ -20,7 +20,7 @@
     "watch-css": "postcss ./src/input.css -o ./public/output.css -w",
     "build-css": "postcss ./src/input.css -o ./public/output.css",
     "docker:build": "docker build -t auth-system-fe .",
-    "docker:run": "docker run --name auth-system-fe -p 80:80 auth-system-fe:latest"
+    "docker:run": "docker run --name auth-system-fe -p 80:80 auth-system-fe"
   },
   "eslintConfig": {
     "extends": [
