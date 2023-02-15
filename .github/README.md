@@ -1,0 +1,1 @@
+You can view the documentation at https://auth-system.fullstack.market/docs/
