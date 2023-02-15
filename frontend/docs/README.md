@@ -47,6 +47,7 @@ npm install
 ## Backend environment variables
 
 - The app requires certain environment variables both for back-end and front-end.
+- Rename .env.sample file under the backend directory as .env
 - Open the .env file in the backend directory and edit the environment variables according to your setup.
 
 ```ini
@@ -71,6 +72,7 @@ SENDGRID_SENDER_EMAIL="Your Company <no-reply@yourdomain.com>"
 
 ## Frontend environment variables
 
+- Rename .env.sample file under the frontend directory as .env
 - The frontend has a single environment variable. It doesn't need to be edited if you didn't change the backend port.
 
 ```ini
