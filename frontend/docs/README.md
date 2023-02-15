@@ -58,7 +58,7 @@ CLIENT_URL="http://localhost:3000"
 PORT=8000
 
 # MongoDB database uri (Replace with your connection string)
-MONGO_URI="mongodb+srv://yourUsername:yourPassword@cluster0..."
+MONGO_URI="mongodb+srv://yourUsername:yourPassword@cluster......."
 
 # Secret key for the jwt
 JWT_SECRET="secret123"
