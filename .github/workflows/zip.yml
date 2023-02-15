@@ -28,7 +28,7 @@ jobs:
         with:
           type: 'zip'
           filename: 'auth-system-${{ steps.package-version.outputs.current-version}}.zip'
-          exclusions: '*.git* *.github* *.vscode* .dockerignore .gitignore docker-compose.yml package.json'      
+          exclusions: '*.git* *.github* *.vscode* *docs* .dockerignore .gitignore docker-compose.yml package.json'      
 
       - name: Release
         uses: ncipollo/release-action@v1.12.0
