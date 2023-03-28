@@ -10,8 +10,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  CAPROVER_HOST: https://captain.fsmdemo.fullstack.market/
-  REACT_APP_BACKEND_URL: https://auth-system.fullstack.market
 
 jobs:
   build:
@@ -50,7 +48,7 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc       
         with:
           build-args: |
-            "REACT_APP_BACKEND_URL=${{ env.REACT_APP_BACKEND_URL }}"
+            "REACT_APP_BACKEND_URL=${{ vars.REACT_APP_BACKEND_URL }}"
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
@@ -63,7 +61,7 @@ jobs:
       - name: Deploy to caprover host
         uses: floms/action-caprover@bc835272f3c1ec1a470d80d44fc2a4518eb85d9d
         with:
-          host: ${{ env.CAPROVER_HOST }}
+          host: ${{ vars.CAPROVER_HOST }}
           app: ${{ matrix.appname }}
           password: "${{ secrets.CAPROVER_PASSWORD }}"
           image: ${{ steps.meta.outputs.tags }}
