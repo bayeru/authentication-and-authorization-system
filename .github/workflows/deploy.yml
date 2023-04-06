@@ -19,11 +19,11 @@ jobs:
       matrix:
         include:
           - dockerfile: ./backend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-backend
+            image: ghcr.io/bayeru/auth-system-backend
             appname: auth-system-backend
             context: ./backend
           - dockerfile: ./frontend/Dockerfile
-            image: ghcr.io/uygarbayer/auth-system-frontend
+            image: ghcr.io/bayeru/auth-system-frontend
             appname: auth-system-frontend
             context: ./frontend
     
